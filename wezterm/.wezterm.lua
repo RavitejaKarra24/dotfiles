@@ -120,6 +120,9 @@ config.enable_tab_bar = false
 config.window_decorations = "RESIZE"
 config.window_background_opacity = 0.7
 config.macos_window_background_blur = 10
+-- Distribute extra pixels evenly so there's no gap on right/bottom edges
+-- Using "0cell" means zero explicit padding, but WezTerm will still
+-- distribute sub-cell leftover pixels evenly across both sides
 config.window_padding = {
     left = 0,
     right = 0,
@@ -127,8 +130,9 @@ config.window_padding = {
     bottom = 0,
 }
 
--- Fill remaining pixels that don't fit a full character cell with background color
-config.use_resize_increments = false
+-- Snap window size to exact cell boundaries so there are no leftover pixels
+-- This eliminates the gap on right/bottom edges in TUI apps like OpenCode
+config.use_resize_increments = true
 
 -- and finally, return the configuration to wezterm
 return config

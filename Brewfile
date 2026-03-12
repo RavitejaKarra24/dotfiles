@@ -25,7 +25,6 @@ brew "btop"                       # System monitor
 brew "cmake"
 brew "eza"                        # Better ls
 brew "fd"                         # Better find
-brew "ffind"
 brew "fzf"                        # Fuzzy finder
 brew "gh"                         # GitHub CLI
 brew "ghq"                        # Git repo manager
@@ -51,15 +50,12 @@ brew "zsh-syntax-highlighting"
 # ============================================================================
 # CLI Tools - Nice to Have
 # ============================================================================
-brew "ansible"
-brew "ant"
 brew "atuin"                      # Shell history
 brew "cmatrix"                    # Matrix screensaver
 brew "ffmpeg"
 brew "figlet"                     # ASCII art text
 brew "gmp"
 brew "httpie"                     # Better curl
-brew "icarus-verilog"
 brew "imagemagick"
 brew "kind"                       # Kubernetes in Docker
 brew "lazygit"                    # Git TUI
@@ -70,7 +66,6 @@ brew "neofetch"                   # System info
 brew "nowplaying-cli"             # Show current playing track
 brew "openjdk"
 brew "openssl@3"
-brew "pandoc"
 brew "pkgconf"
 brew "poppler"
 brew "python-tk@3.12"
@@ -83,7 +78,6 @@ brew "switchaudio-osx"            # Audio output switcher
 brew "tesseract"                  # OCR
 brew "tlrc"                       # TLDR pages
 brew "yarn", link: false
-brew "yewtube"                    # YouTube TUI
 brew "libyaml"
 brew "icu4c@76"
 brew "gemini-cli"
@@ -101,7 +95,6 @@ brew "koekeishiya/formulae/yabai"      # Tiling WM
 # GUI Applications (Casks)
 # ============================================================================
 cask "nikitabobko/tap/aerospace"  # Tiling WM (alternative)
-cask "anaconda"
 cask "codex"
 cask "ghostty"                    # Terminal emulator
 cask "ubersicht"                  # Desktop widgets
