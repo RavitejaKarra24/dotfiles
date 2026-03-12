@@ -1,0 +1,49 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Secrets - NEVER commit these
+zsh/.zshrc.secrets
+
+# Application state/cache (not config)
+calcure/.config/calcure/events.csv
+calcure/.config/calcure/tasks.csv
+calcure/.config/calcure/info.log
+atuin/.config/atuin/server_id
+atuin/.config/atuin/history.db
+atuin/.config/atuin/history.db-*
+
+# Zed state
+zed/.config/zed/conversations/
+zed/.config/zed/embeddings/
+zed/.config/zed/prompts/
+
+# Karabiner automatic backups
+karabiner/.config/karabiner/automatic_backups/
+
+# Neovim generated/cache files
+nvim/.config/nvim/plugin/
+nvim/.config/nvim/.luarc.json
+nvim/.config/nvim/lazy-lock.json
+
+# Fish history and generated completions
+fish/.config/fish/fish_history
+fish/.config/fish/fish_variables
+fish/.config/fish/completions/
+
+# btop logs
+btop/.config/btop/btop.log
+
+# Spotify player cache
+spotify-player/.config/spotify-player/cache/
+spotify-player/.config/spotify-player/.spotify_token_cache*
+
+# Node modules (if any sneak in)
+node_modules/
+
+# Zed temp files
+zed/.config/zed/.tmp*
+
+# Yazi temp/backup files
+yazi/.config/yazi/*.toml-*

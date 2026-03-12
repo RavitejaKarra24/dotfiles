@@ -1,0 +1,11 @@
+# This is Git's per-user configuration file.
+[user]
+	name = RavitejaKarra24
+	email = ravitejakarra24@gmail.com
+# Please adapt and uncomment the following lines:
+#	name = RavitejaKarra24
+#	email = ravitejakarra24@gmail.com
+[credential]
+	helper = store
+[init]
+	defaultBranch = main

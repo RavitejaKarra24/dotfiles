@@ -1,0 +1,154 @@
+// // Zed keymap
+// //
+// // For information on binding keys, see the Zed
+// // documentation: https://zed.dev/docs/key-bindings
+// //
+// // To see the default key bindings run `zed: Open Default Keymap`
+// // from the command palette.
+// [
+//   {
+//     "context": "Workspace",
+//     "bindings": {
+//       "leader p v": "explorer::toggle",
+//       "leader enter": "command::run", // Assuming this runs the equivalent of sourcing vimrc
+//       "ctrl p": "git_files::open", // Assuming GFiles equivalent
+//       "leader p f": "file_finder::open",
+//       "ctrl j": "quickfix::next",
+//       "ctrl k": "quickfix::previous"
+//     }
+//   },
+//   {
+//     "context": "Editor",
+//     "bindings": {
+//       "j k": ["editor::insert_mode", "escape"], // Map jk to escape in insert mode
+//       "ctrl d": "editor::delete_line", // Not exact, but closest functionality
+//       "ctrl u": ["editor::change_case", "upper"], // Not exact, but for uppercase
+//       "ctrl s": "editor::save"
+//     },
+//     "settings": {
+//       "scroll_offset": 15,
+//       "tab_size": 4,
+//       "soft_tabs": true,
+//       "smart_indent": true,
+//       "mouse": "on",
+//       "color_scheme": "ayu-dark" // Assuming Zed has or you've added an ayu theme
+//     }
+//   },
+//   {
+//     "context": "VisualMode",
+//     "bindings": {
+//       "leader y": "editor::copy",
+//       "y": "editor::copy",
+//       "Y": [
+//         "editor::goto_beginning_of_document",
+//         "editor::copy_to_end_of_document"
+//       ],
+//       "J": "editor::move_lines_down",
+//       "K": "editor::move_lines_up"
+//     }
+//   }
+// ]
+
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      // Netrw explorer -> Zed file explorer
+      "leader p v": "explorer::toggle",
+
+      // Telescope
+      "ctrl p": "git_files::open", // <C-p> = git files
+      "leader p f": "file_finder::open", // <leader>pf = find files
+      "leader p s": "search::within_files_prompt", // <leader>ps = grep with prompt (approx of grep_string)
+      "leader p g": "search::within_files", // <leader>pg = live grep
+
+      // Git (vim-fugitive -> Zed Git panel)
+      "leader g s": "git::toggle_panel",
+
+      // Terminal (approx of your term keymaps)
+      "leader t t": "terminal::new",
+      "leader t h": ["pane::split_down", "terminal::new"],
+      "leader t v": ["pane::split_right", "terminal::new"]
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      // Insert-mode 'jk' escape
+      "j k": "editor::escape",
+      "ctrl c": "editor::escape",
+
+      // Join lines like 'J' in normal mode
+      "J": "editor::join_lines",
+
+      // Half-page jump (center cursor effect not available, but close)
+      "ctrl d": "editor::page_down_half",
+      "ctrl u": "editor::page_up_half",
+
+      // LSP-style actions
+      "g d": "editor::go_to_definition", // gd
+      "K": "editor::hover", // K
+      "leader v w s": "search::workspace_symbols", // <leader>vws
+      "leader v d": "problems::toggle_panel", // <leader>vd (float ≈ problems panel)
+      "leader v c a": "editor::code_actions", // <leader>vca
+      "leader v r r": "editor::find_references", // <leader>vrr
+      "leader v r n": "editor::rename_symbol", // <leader>vrn
+      "ctrl h": "editor::signature_help", // insert <C-h>
+
+      // Diagnostics navigation
+      "[ d": "diagnostics::previous",
+      "] d": "diagnostics::next",
+
+      // Format buffer
+      "leader f": "editor::format_document",
+
+      // Quickfix navigation (matches your Neovim: <C-k> next, <C-j> previous)
+      "ctrl k": "quickfix::next",
+      "ctrl j": "quickfix::previous",
+
+      // Clipboard and delete (no registers/blackhole in Zed)
+      "leader y": "editor::copy",
+      "leader Y": "editor::copy_line",
+      "leader d": "editor::delete",
+
+      // Search/replace word under cursor: open global search as an approximation
+      "leader s": "search::open"
+    },
+    "settings": {
+      "scroll_offset": 15,
+      "tab_size": 4,
+      "soft_tabs": true,
+      "smart_indent": true,
+      "mouse": "on",
+      "color_scheme": "ayu-dark"
+    }
+  },
+  {
+    "context": "VisualMode",
+    "bindings": {
+      // Paste over selection (blackhole paste not available—this will overwrite clipboard)
+      "leader p": "editor::paste",
+
+      // Yank
+      "leader y": "editor::copy",
+      "y": "editor::copy",
+
+      // Approximate 'Y' behavior (copy to EOF)
+      "Y": [
+        "editor::goto_beginning_of_document",
+        "editor::copy_to_end_of_document"
+      ],
+
+      // Move selected lines
+      "J": "editor::move_lines_down",
+      "K": "editor::move_lines_up"
+    }
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      // Escape to editor (approx of <Esc> to normal mode)
+      "escape": "terminal::focus_editor"
+    }
+  }
+]
