@@ -51,13 +51,20 @@ window-decoration = auto
 background-opacity = 0.7
 background-blur = 10
 
-# No padding (matches WezTerm window_padding = 0)
-window-padding-x = 0
-window-padding-y = 0
+# Slight padding on left and top for breathing room
+window-padding-x = 4,0
+window-padding-y = 4,0
 
 # Snap window to cell boundaries (matches WezTerm use_resize_increments)
 window-step-resize = true
 
 # macOS: hide titlebar and traffic lights, tabs work via keyboard
-# Cmd+T = new tab, Cmd+Shift+]/[ = next/prev tab, Cmd+W = close tab
 macos-titlebar-style = hidden
+
+# ============================================================================
+# Keybinds
+# ============================================================================
+# Cmd+T = new tab (not new window)
+keybind = super+t=new_tab
+# Cmd+W = close current tab/split
+keybind = super+w=close_surface
