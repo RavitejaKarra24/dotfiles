@@ -124,15 +124,13 @@ config.macos_window_background_blur = 10
 -- Using "0cell" means zero explicit padding, but WezTerm will still
 -- distribute sub-cell leftover pixels evenly across both sides
 config.window_padding = {
-    left = 0,
+    left = 4,
     right = 0,
     top = 0,
     bottom = 0,
 }
 
--- Snap window size to exact cell boundaries so there are no leftover pixels
--- This eliminates the gap on right/bottom edges in TUI apps like OpenCode
-config.use_resize_increments = true
+config.adjust_window_size_when_changing_font_size = false
 
 -- and finally, return the configuration to wezterm
 return config

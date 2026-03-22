@@ -43,8 +43,7 @@ palette = 15=#24EAF7
 # ============================================================================
 # Window
 # ============================================================================
-# Keep decorations enabled so tabs work, but hide the titlebar and
-# traffic lights via macos-titlebar-style = hidden below
+# Keep decorations enabled so tabs work via native macOS tab bar
 window-decoration = auto
 
 # Transparency and blur
@@ -52,14 +51,14 @@ background-opacity = 0.7
 background-blur = 10
 
 # Slight padding on left and top for breathing room
-window-padding-x = 4,0
-window-padding-y = 4,0
+window-padding-x = 10,0
+window-padding-y = 10,0
 
 # Snap window to cell boundaries (matches WezTerm use_resize_increments)
 window-step-resize = true
 
-# macOS: hide titlebar and traffic lights, tabs work via keyboard
-macos-titlebar-style = hidden
+# macOS: transparent titlebar blends with terminal background, tabs work
+macos-titlebar-style = transparent
 
 # ============================================================================
 # Keybinds
