@@ -325,3 +325,8 @@ _fahh_on_error() {
 precmd_functions+=(_fahh_on_error)
 
 export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/ravitejakarra/.lmstudio/bin"
+# End of LM Studio CLI section
+

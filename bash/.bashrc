@@ -7,3 +7,8 @@ eval "$(atuin init bash)"
 
 
 export XDG_CONFIG_HOME="$HOME/.config"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/ravitejakarra/.lmstudio/bin"
+# End of LM Studio CLI section
+
