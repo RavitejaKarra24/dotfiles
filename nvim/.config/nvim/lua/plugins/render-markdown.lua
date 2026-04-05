@@ -215,6 +215,13 @@ return {
                     highlight = 'RenderMarkdownWinSep',
                 },
             },
+
+            -- Disable in floating windows (LSP hover, etc.) to avoid treesitter crashes
+            overrides = {
+                buftype = {
+                    nofile = { enabled = false },
+                },
+            },
         })
         
         -- Add keymaps for render-markdown

@@ -71,6 +71,21 @@ These work when an LSP is attached (Rust, TS, Lua).
 - `<leader>tv` -> terminal in vertical split
 - `<leader>tt` -> terminal in current window
 - Terminal mode `<Esc>` -> normal mode
+- `q` in terminal buffer (normal mode) -> close terminal
+
+## Code Runner
+
+- `<leader>rr` -> run current file (auto-detects language)
+- `<leader>rc` -> run a custom command (prompts for input)
+
+Supported: JavaScript (node), TypeScript (bun), Python, Rust (cargo), Go, C, C++, Lua, Shell, Ruby, Java. Add more in `run_commands` table in `terminal.lua`.
+
+## Package Installer
+
+- `<leader>ri` -> install package from import line under cursor (auto-detects package manager)
+- `<leader>ra` -> add a package by name (prompts for input, auto-detects package manager)
+
+Detects: bun, pnpm, yarn, npm, pip, cargo, go modules.
 
 ## Git / Tools
 
