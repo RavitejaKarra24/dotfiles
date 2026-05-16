@@ -50,105 +50,153 @@
 // ]
 
 [
-  {
-    "context": "Workspace",
-    "bindings": {
-      // Netrw explorer -> Zed file explorer
-      "leader p v": "explorer::toggle",
+    {
+        "context": "Workspace",
+        "bindings": {
+            // Netrw / project explorer
+            "space p v": "project_panel::ToggleFocus",
 
-      // Telescope
-      "ctrl p": "git_files::open", // <C-p> = git files
-      "leader p f": "file_finder::open", // <leader>pf = find files
-      "leader p s": "search::within_files_prompt", // <leader>ps = grep with prompt (approx of grep_string)
-      "leader p g": "search::within_files", // <leader>pg = live grep
+            // Telescope-ish
+            "space p f": "file_finder::Toggle",
+            "ctrl-p": "file_finder::Toggle",
+            "space p g": ["pane::DeploySearch", { "replace_enabled": false }],
+            "space p s": ["pane::DeploySearch", { "replace_enabled": false }],
 
-      // Git (vim-fugitive -> Zed Git panel)
-      "leader g s": "git::toggle_panel",
+            // Git / panels
+            "space g s": "git_panel::ToggleFocus",
+            "space q": "diagnostics::Deploy",
 
-      // Terminal (approx of your term keymaps)
-      "leader t t": "terminal::new",
-      "leader t h": ["pane::split_down", "terminal::new"],
-      "leader t v": ["pane::split_right", "terminal::new"]
-    }
-  },
-  {
-    "context": "Editor",
-    "bindings": {
-      // Insert-mode 'jk' escape
-      "j k": "editor::escape",
-      "ctrl c": "editor::escape",
+            // Terminal
+            "space t t": "terminal_panel::ToggleFocus",
+            "space t h": ["workspace::SendKeystrokes", "ctrl-w s ctrl-`"],
+            "space t v": ["workspace::SendKeystrokes", "ctrl-w v ctrl-`"],
 
-      // Join lines like 'J' in normal mode
-      "J": "editor::join_lines",
+            // Zed config access
+            "space v p p": "zed::OpenSettingsFile",
+            "space v p l": "zed::OpenKeymapFile",
 
-      // Half-page jump (center cursor effect not available, but close)
-      "ctrl d": "editor::page_down_half",
-      "ctrl u": "editor::page_up_half",
-
-      // LSP-style actions
-      "g d": "editor::go_to_definition", // gd
-      "K": "editor::hover", // K
-      "leader v w s": "search::workspace_symbols", // <leader>vws
-      "leader v d": "problems::toggle_panel", // <leader>vd (float ≈ problems panel)
-      "leader v c a": "editor::code_actions", // <leader>vca
-      "leader v r r": "editor::find_references", // <leader>vrr
-      "leader v r n": "editor::rename_symbol", // <leader>vrn
-      "ctrl h": "editor::signature_help", // insert <C-h>
-
-      // Diagnostics navigation
-      "[ d": "diagnostics::previous",
-      "] d": "diagnostics::next",
-
-      // Format buffer
-      "leader f": "editor::format_document",
-
-      // Quickfix navigation (matches your Neovim: <C-k> next, <C-j> previous)
-      "ctrl k": "quickfix::next",
-      "ctrl j": "quickfix::previous",
-
-      // Clipboard and delete (no registers/blackhole in Zed)
-      "leader y": "editor::copy",
-      "leader Y": "editor::copy_line",
-      "leader d": "editor::delete",
-
-      // Search/replace word under cursor: open global search as an approximation
-      "leader s": "search::open"
+            // Save
+            "ctrl-s": "workspace::Save",
+        },
     },
-    "settings": {
-      "scroll_offset": 15,
-      "tab_size": 4,
-      "soft_tabs": true,
-      "smart_indent": true,
-      "mouse": "on",
-      "color_scheme": "ayu-dark"
-    }
-  },
-  {
-    "context": "VisualMode",
-    "bindings": {
-      // Paste over selection (blackhole paste not available—this will overwrite clipboard)
-      "leader p": "editor::paste",
 
-      // Yank
-      "leader y": "editor::copy",
-      "y": "editor::copy",
+    {
+        "context": "vim_mode == insert && !menu",
+        "bindings": {
+            // Your Neovim insert escapes
+            "j k": "vim::NormalBefore",
+            "ctrl-c": "vim::NormalBefore",
+            "ctrl-h": "editor::ShowSignatureHelp",
+        },
+    },
 
-      // Approximate 'Y' behavior (copy to EOF)
-      "Y": [
-        "editor::goto_beginning_of_document",
-        "editor::copy_to_end_of_document"
-      ],
+    {
+        "context": "VimControl && !menu",
+        "bindings": {
+            // Your movement/editing muscle memory
+            "J": ["workspace::SendKeystrokes", "shift-j"],
+            "ctrl-d": "vim::ScrollDown",
+            "ctrl-u": "vim::ScrollUp",
+            "n": ["workspace::SendKeystrokes", "n z z z v"],
+            "shift-n": ["workspace::SendKeystrokes", "shift-n z z z v"],
 
-      // Move selected lines
-      "J": "editor::move_lines_down",
-      "K": "editor::move_lines_up"
-    }
-  },
-  {
-    "context": "Terminal",
-    "bindings": {
-      // Escape to editor (approx of <Esc> to normal mode)
-      "escape": "terminal::focus_editor"
-    }
-  }
+            // LSP, based on your nvim/lua/plugins/lsp.lua
+            "g d": "editor::GoToDefinition",
+            "g D": "editor::GoToDeclaration",
+            "g i": "editor::GoToImplementation",
+            "g r": "editor::FindAllReferences",
+            "K": "editor::Hover",
+            "space c a": "editor::ToggleCodeActions",
+            "space r n": "editor::Rename",
+            "space e": "editor::ToggleDiagnostics",
+            "g l": "editor::ToggleDiagnostics",
+            "[ d": "editor::GoToPreviousDiagnostic",
+            "] d": "editor::GoToDiagnostic",
+
+            // Formatting
+            "space f": "editor::Format",
+            "space c f": "editor::Format",
+
+            // Quickfix/location-list approximations
+            "ctrl-k": "editor::GoToDiagnostic",
+            "ctrl-j": "editor::GoToPreviousDiagnostic",
+            "space k": "editor::GoToDiagnostic",
+            "space j": "editor::GoToPreviousDiagnostic",
+
+            // Clipboard/delete approximations
+            "space y": "editor::Copy",
+            "space Y": ["workspace::SendKeystrokes", "y $"],
+            "space d": "editor::Delete",
+
+            // Search/replace word under cursor approximation
+            "space s": ["pane::DeploySearch", { "replace_enabled": true }],
+
+            // Undo tree replacement: Zed has native timeline/history, not Undotree
+            "space u": "git::FileHistory",
+
+            // Harpoon-ish replacement: Zed has bookmarks, not Harpoon lists
+            "space a": "pane::TogglePinTab",
+            "ctrl-e": "tab_switcher::Toggle",
+            "space 1": ["pane::ActivateItem", 0],
+            "space 2": ["pane::ActivateItem", 1],
+            "space 3": ["pane::ActivateItem", 2],
+            "space 4": ["pane::ActivateItem", 3],
+            "ctrl-shift-n": "pane::ActivateNextItem",
+            "ctrl-shift-p": "pane::ActivatePreviousItem",
+
+            // Comments/surround are built into Zed Vim mode:
+            // gcc, gc, ys, cs, ds
+            "Q": "zed::NoAction",
+        },
+    },
+
+    {
+        "context": "vim_mode == visual && !menu",
+        "bindings": {
+            // Move selected lines
+            "J": "editor::MoveLineDown",
+            "K": "editor::MoveLineUp",
+
+            // Clipboard
+            "space y": "editor::Copy",
+            "y": "editor::Copy",
+
+            // Paste over selection. Exact black-hole-register behavior is not available.
+            "space p": "editor::Paste",
+
+            // Visual surround support
+            "s": "vim::PushSneak",
+            "shift-s": "vim::PushSneakBackward",
+            "shift-x": "vim::Exchange",
+        },
+    },
+
+    {
+        "context": "ProjectPanel && not_editing",
+        "bindings": {
+            // Netrw-style project panel navigation
+            "h": "project_panel::CollapseSelectedEntry",
+            "l": "project_panel::ExpandSelectedEntry",
+            "o": "project_panel::Open",
+            "enter": "project_panel::Open",
+            "t": "project_panel::OpenPermanent",
+            "v": "project_panel::OpenSplitVertical",
+            "s": "project_panel::OpenSplitHorizontal",
+            "a": "project_panel::NewFile",
+            "A": "project_panel::NewDirectory",
+            "r": "project_panel::Rename",
+            "d": "project_panel::Trash",
+        },
+    },
+
+    {
+        "context": "Dock",
+        "bindings": {
+            // tmux/vim-style pane movement
+            "ctrl-w h": "workspace::ActivatePaneLeft",
+            "ctrl-w j": "workspace::ActivatePaneDown",
+            "ctrl-w k": "workspace::ActivatePaneUp",
+            "ctrl-w l": "workspace::ActivatePaneRight",
+        },
+    },
 ]

@@ -117,6 +117,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.config/zsh/theme.zsh ]] || source ~/.config/zsh/theme.zsh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 export PATH="/usr/local/opt/adoptopenjdk11/bin:$PATH"
 # eval "$(gh copilot alias -- zsh)"
@@ -312,17 +313,17 @@ except:
 }
 
 
-# Play fahh sound on command error
-_fahh_on_error() {
-  local exit_code=$?
-  if [[ $exit_code -ne 0 ]]; then
-    (afplay ~/fahhhhh.mp3 &>/dev/null &)   # macOS
-    # (mpg123 ~/fahhhhh.mp3 &>/dev/null &) # Linux with mpg123
-    # (ffplay -nodisp -autoexit ~/fahhhhh.mp3 &>/dev/null &) # Linux with ffplay
-  fi
-}
-
-precmd_functions+=(_fahh_on_error)
+# # Play fahh sound on command error
+# _fahh_on_error() {
+#   local exit_code=$?
+#   if [[ $exit_code -ne 0 ]]; then
+#     (afplay ~/fahhhhh.mp3 &>/dev/null &)   # macOS
+#     # (mpg123 ~/fahhhhh.mp3 &>/dev/null &) # Linux with mpg123
+#     # (ffplay -nodisp -autoexit ~/fahhhhh.mp3 &>/dev/null &) # Linux with ffplay
+#   fi
+# }
+#
+# precmd_functions+=(_fahh_on_error)
 
 export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 
@@ -330,3 +331,4 @@ export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 export PATH="$PATH:/Users/ravitejakarra/.lmstudio/bin"
 # End of LM Studio CLI section
 
+alias rust-book='open -a "Zen Browser" ~/dock/raviteja/rust/book/book/index.html'

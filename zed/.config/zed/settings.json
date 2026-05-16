@@ -6,19 +6,39 @@
 // To see all of Zed's default settings without changing your
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
-{
-  "agent": {
-    "default_model": {
-      "provider": "zed.dev",
-      "model": "claude-sonnet-4-6",
-      "enable_thinking": false,
-      "effort": "high"
+  {
+    "edit_predictions": {
+        "provider": "zed"
     },
-    "favorite_models": [],
-    "model_parameters": []
-  },
-  "theme": "One Dark",
-  "vim_mode": true,
-  "ui_font_size": 16,
-  "buffer_font_size": 16
-}
+    "outline_panel": {
+        "dock": "left"
+    },
+    "collaboration_panel": {
+        "dock": "left"
+    },
+    "agent": {
+        "dock": "right",
+        "favorite_models": [],
+        "model_parameters": []
+    },
+    "git_panel": {
+        "dock": "left"
+    },
+    "vim_mode": true,
+    "base_keymap": "VSCode",
+    "theme": "Ayu Dark",
+    "buffer_font_size": 15,
+    "tab_size": 4,
+    "soft_tabs": true,
+    "scrollbar": {
+      "show": "auto"
+    },
+    "relative_line_numbers": "enabled",
+    "project_panel": {
+      "dock": "left",
+      "git_status": true,
+      "show_diagnostics": "all",
+      "auto_reveal_entries": true
+    },
+    "format_on_save": "on"
+  }
