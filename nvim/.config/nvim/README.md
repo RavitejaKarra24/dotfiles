@@ -12,10 +12,23 @@ This is a minimal coding-focused Neovim setup.
 ## File and Search
 
 - `<leader>pv` -> file explorer (`:Ex`)
-- `<leader>pf` -> find files (Telescope)
-- `<C-p>` -> git files (Telescope)
+- `<leader>pf` -> find files (FFF)
+- `<C-p>` -> find files from git root (FFF)
 - `<leader>ps` -> grep prompt (Telescope)
 - `<leader>pg` -> live grep (Telescope)
+
+### FFF Picker
+
+- `<CR>` -> open selected file
+- `<C-v>` -> open selected file in vertical split
+- `<C-s>` -> open selected file in horizontal split
+- `<C-t>` -> open selected file in new tab
+- `<C-n>` / `<Down>` -> next result
+- `<C-p>` / `<Up>` -> previous result
+- `<C-d>` -> scroll preview down
+- `<C-u>` -> scroll preview up
+- `<F2>` -> toggle debug scores
+- `<Esc>` / `<C-c>` -> close picker
 
 ## LSP Navigation
 
