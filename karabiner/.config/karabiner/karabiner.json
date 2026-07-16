@@ -4,18 +4,22 @@
             "complex_modifications": {
                 "rules": [
                     {
+                        "description": "Caps Lock → Meh (cmd+ctrl+alt) for AeroSpace",
                         "manipulators": [
                             {
-                                "description": "Change caps_lock to command+control+option+shift.",
+                                "description": "Hold Caps as cmd+ctrl+alt; alone sends Escape",
                                 "from": {
                                     "key_code": "caps_lock",
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
                                     {
-                                        "key_code": "left_shift",
-                                        "modifiers": ["left_command", "left_control", "left_option"]
+                                        "key_code": "left_option",
+                                        "modifiers": ["left_command", "left_control"]
                                     }
+                                ],
+                                "to_if_alone": [
+                                    { "key_code": "escape" }
                                 ],
                                 "type": "basic"
                             }

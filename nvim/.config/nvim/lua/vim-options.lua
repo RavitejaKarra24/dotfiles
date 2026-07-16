@@ -1,8 +1,8 @@
 -- Set space as the leader key
 vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
--- Open netrw file explorer
-vim.keymap.set("n", "<leader>pv", "<cmd>Ex<CR>")
+-- File explorer: oil.nvim provides <leader>pv and -
 
 -- Map 'jk' to escape in insert mode
 vim.keymap.set("i", "jk", "<Esc>")
@@ -43,10 +43,15 @@ vim.keymap.set("n", "Q", "<nop>")
 -- Open tmux sessionizer
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
--- Format buffer using LSP
+-- Format buffer: prefer conform when available, else LSP
 vim.keymap.set("n", "<leader>f", function()
-    vim.lsp.buf.format()
-end)
+    local ok, conform = pcall(require, "conform")
+    if ok then
+        conform.format({ async = false, lsp_fallback = true })
+    else
+        vim.lsp.buf.format()
+    end
+end, { desc = "Format buffer" })
 
 -- Navigate through quickfix list
 vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")

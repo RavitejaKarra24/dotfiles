@@ -23,6 +23,10 @@ return {
         json = { "prettier" },
         yaml = { "prettier" },
         markdown = { "prettier" },
+        rust = { "rustfmt" },
+        go = { "gofmt" },
+        python = { "ruff_format", "black" },
+        lua = { "stylua" },
       },
       formatters = {
         prettier = {

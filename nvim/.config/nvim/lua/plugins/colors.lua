@@ -16,18 +16,19 @@ local function load_wezterm_themes()
   return {}
 end
 
+-- Matches WezTerm active_theme = "deep_ocean" → onedark
+local DEFAULT_COLORSCHEME = "onedark"
+
 local function resolve_colorscheme()
   local terminal_theme = vim.env.DOTFILES_THEME
-  if not terminal_theme or terminal_theme == "" then
-    return "rose-pine"
+  if terminal_theme and terminal_theme ~= "" then
+    local selected_theme = load_wezterm_themes()[terminal_theme]
+    if selected_theme and selected_theme.nvim then
+      return selected_theme.nvim
+    end
   end
 
-  local selected_theme = load_wezterm_themes()[terminal_theme]
-  if selected_theme and selected_theme.nvim then
-    return selected_theme.nvim
-  end
-
-  return "rose-pine"
+  return DEFAULT_COLORSCHEME
 end
 
 local function make_background_transparent()
@@ -54,7 +55,7 @@ local function apply_colorscheme()
   local ok = pcall(vim.cmd.colorscheme, colorscheme)
 
   if not ok then
-    vim.cmd.colorscheme("rose-pine")
+    pcall(vim.cmd.colorscheme, DEFAULT_COLORSCHEME)
   end
 
   make_background_transparent()

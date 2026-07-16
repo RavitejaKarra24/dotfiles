@@ -11,11 +11,13 @@ This is a minimal coding-focused Neovim setup.
 
 ## File and Search
 
-- `<leader>pv` -> file explorer (`:Ex`)
+- `<leader>pv` / `-` -> parent directory (oil.nvim; replaces netrw)
 - `<leader>pf` -> find files (FFF)
 - `<C-p>` -> find files from git root (FFF)
 - `<leader>ps` -> grep prompt (Telescope)
 - `<leader>pg` -> live grep (Telescope)
+
+Oil is the default file explorer (`show_hidden = true`). Press `q` to close.
 
 ### FFF Picker
 
@@ -55,8 +57,10 @@ These work when an LSP is attached (Rust, TS, Lua).
 
 ## Formatting
 
-- `<leader>f` -> LSP format
+- `<leader>f` -> Conform format (LSP fallback if Conform unavailable)
 - `<leader>cf` -> Conform format
+
+Formatters: prettier (web/md), rustfmt, gofmt, ruff/black (Python), stylua (Lua).
 
 ## Quickfix and Location List
 
@@ -103,6 +107,15 @@ Detects: bun, pnpm, yarn, npm, pip, cargo, go modules.
 ## Git / Tools
 
 - `<leader>gs` -> Fugitive `:Git`
+- `<leader>gg` -> LazyGit
+- `<leader>gf` -> LazyGit current file
+- `<leader>gl` -> LazyGit commit filter
+- `]h` / `[h` -> next / previous git hunk (gitsigns)
+- `<leader>hs` -> stage hunk
+- `<leader>hr` -> reset hunk
+- `<leader>hp` -> preview hunk
+- `<leader>hb` -> blame line
+- `<leader>hd` -> diff this
 - `<leader>u` -> Undotree toggle
 - `<leader>a` -> Harpoon add file
 - `<C-e>` -> Harpoon quick menu
@@ -110,6 +123,12 @@ Detects: bun, pnpm, yarn, npm, pip, cargo, go modules.
 - `<leader>mr` -> RenderMarkdown toggle
 - `<leader>me` -> RenderMarkdown enable
 - `<leader>md` -> RenderMarkdown disable
+
+which-key shows leader groups after a short delay (`<leader>g` git, `h` hunks, `p` project/find, `r` run/packages, `t` terminal, `c` code, `e` diagnostics).
+
+## Colorscheme
+
+Default is **onedark** (aligned with WezTerm/Ghostty `deep_ocean`). Override via `DOTFILES_THEME` if WezTerm theme mapping is present.
 
 ## Config Shortcuts
 

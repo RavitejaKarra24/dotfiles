@@ -1,7 +1,47 @@
+gui:
+  nerdFontsVersion: "3"
+  showIcons: true
+  theme:
+    activeBorderColor:
+      - "#58A6FF"
+      - bold
+    inactiveBorderColor:
+      - "#484F58"
+    searchingActiveBorderColor:
+      - "#7EE787"
+      - bold
+    optionsTextColor:
+      - "#58A6FF"
+    selectedLineBgColor:
+      - "#264F78"
+    cherryPickedCommitBgColor:
+      - "#21262D"
+    cherryPickedCommitFgColor:
+      - "#BC8CFF"
+    unstagedChangesColor:
+      - "#F85149"
+    defaultFgColor:
+      - "#D4D4D4"
+os:
+  editPreset: "nvim"
+git:
+  pagers:
+    - colorArg: always
+      pager: delta --dark --paging=never
 customCommands:
   - key: "C"
     command: "git cz"
     description: "commit with commitizen"
     context: "files"
     loadingText: "opening commitizen commit tool"
+    output: terminal
+  - key: "P"
+    command: "gh pr create --fill"
+    description: "create pull request"
+    context: "localBranches"
+    output: terminal
+  - key: "p"
+    command: "git push -u origin HEAD"
+    description: "push with upstream"
+    context: "localBranches"
     output: terminal

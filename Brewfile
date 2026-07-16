@@ -11,7 +11,6 @@ tap "felixkratz/formulae"
 tap "homebrew/bundle"
 tap "homebrew/services"
 tap "jesseduffield/lazygit"
-tap "koekeishiya/formulae"
 tap "nikitabobko/tap"
 tap "opencode-ai/tap"
 tap "th-ch/youtube-music"
@@ -22,6 +21,7 @@ tap "th-ch/youtube-music"
 brew "bash"
 brew "bat"                        # Better cat
 brew "btop"                       # System monitor
+brew "ctop"                       # Container monitor
 brew "cmake"
 brew "eza"                        # Better ls
 brew "fd"                         # Better find
@@ -62,7 +62,8 @@ brew "lazygit"                    # Git TUI
 brew "maven"
 brew "mpv"                        # Media player
 brew "mysql"
-brew "neofetch"                   # System info
+brew "fastfetch"                  # System info
+brew "git-delta"                  # Better git diffs
 brew "nowplaying-cli"             # Show current playing track
 brew "openjdk"
 brew "openssl@3"
@@ -88,13 +89,11 @@ brew "gemini-cli"
 brew "anomalyco/tap/opencode"
 brew "caarlos0/tap/timer"         # Pomodoro timer
 brew "felixkratz/formulae/sketchybar"  # macOS status bar
-brew "koekeishiya/formulae/skhd"       # Hotkey daemon
-brew "koekeishiya/formulae/yabai"      # Tiling WM
 
 # ============================================================================
 # GUI Applications (Casks)
 # ============================================================================
-cask "nikitabobko/tap/aerospace"  # Tiling WM (alternative)
+cask "nikitabobko/tap/aerospace"  # Tiling WM
 cask "codex"
 cask "ghostty"                    # Terminal emulator
 cask "ubersicht"                  # Desktop widgets

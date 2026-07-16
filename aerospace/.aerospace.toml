@@ -1,0 +1,170 @@
+# AeroSpace config — managed via Stow from ~/.dotfiles/aerospace
+# Docs: https://nikitabobko.github.io/AeroSpace/guide
+#
+# Caps Lock (Karabiner) = Meh: cmd + ctrl + alt
+#   Meh + hjkl         → focus window
+#   Meh + Shift + hjkl → move window
+#   (frees plain Ctrl for nvim/tmux)
+
+config-version = 2
+
+after-login-command = []
+
+after-startup-command = ['exec-and-forget sketchybar']
+
+exec-on-workspace-change = ['/bin/bash', '-c',
+    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
+]
+
+start-at-login = true
+
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+accordion-padding = 30
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+key-mapping.preset = 'qwerty'
+
+# Keep named + numeric workspaces alive for SketchyBar indicators
+persistent-workspaces = [
+    '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    'B', 'E', 'M', 'N', 'P', 'T', 'V',
+]
+
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+on-focus-changed = ['move-mouse window-lazy-center']
+
+[gaps]
+inner.horizontal = 0
+inner.vertical = 0
+outer.left = 0
+outer.bottom = 0
+outer.top = 4
+outer.right = 0
+
+[mode.main.binding]
+
+alt-slash = 'layout tiles horizontal vertical'
+alt-comma = 'layout accordion horizontal vertical'
+
+# Focus: Meh (Caps) + hjkl
+cmd-alt-ctrl-h = 'focus left'
+cmd-alt-ctrl-j = 'focus down'
+cmd-alt-ctrl-k = 'focus up'
+cmd-alt-ctrl-l = 'focus right'
+
+# Move: Meh + Shift + hjkl
+cmd-alt-ctrl-shift-h = 'move left'
+cmd-alt-ctrl-shift-j = 'move down'
+cmd-alt-ctrl-shift-k = 'move up'
+cmd-alt-ctrl-shift-l = 'move right'
+
+# Workspaces
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
+alt-b = 'workspace B'
+alt-e = 'workspace E'
+alt-m = 'workspace M'
+alt-n = 'workspace N'
+alt-p = 'workspace P'
+alt-v = 'workspace V'
+
+# Jump to terminal workspace and open WezTerm
+alt-t = ['workspace T', 'exec-and-forget open -a WezTerm']
+
+# Move node to workspace (alt-shift)
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+alt-shift-3 = 'move-node-to-workspace 3'
+alt-shift-4 = 'move-node-to-workspace 4'
+alt-shift-5 = 'move-node-to-workspace 5'
+alt-shift-6 = 'move-node-to-workspace 6'
+alt-shift-7 = 'move-node-to-workspace 7'
+alt-shift-8 = 'move-node-to-workspace 8'
+alt-shift-9 = 'move-node-to-workspace 9'
+alt-shift-b = 'move-node-to-workspace B'
+alt-shift-e = 'move-node-to-workspace E'
+alt-shift-m = 'move-node-to-workspace M'
+alt-shift-n = 'move-node-to-workspace N'
+alt-shift-p = 'move-node-to-workspace P'
+alt-shift-t = 'move-node-to-workspace T'
+alt-shift-v = 'move-node-to-workspace V'
+
+# Fullscreen: Meh + f
+cmd-alt-ctrl-f = 'fullscreen'
+
+alt-tab = 'workspace-back-and-forth'
+alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+
+alt-shift-semicolon = 'mode service'
+alt-r = 'mode resize'
+
+[mode.resize.binding]
+h = 'resize width -50'
+j = 'resize height +50'
+k = 'resize height -50'
+l = 'resize width +50'
+b = 'balance-sizes'
+minus = 'resize smart -50'
+equal = 'resize smart +50'
+enter = 'mode main'
+esc = 'mode main'
+
+[mode.service.binding]
+esc = ['reload-config', 'mode main']
+r = ['flatten-workspace-tree', 'mode main']
+f = ['layout floating tiling', 'mode main']
+backspace = ['close-all-windows-but-current', 'mode main']
+alt-shift-h = ['join-with left', 'mode main']
+alt-shift-j = ['join-with down', 'mode main']
+alt-shift-k = ['join-with up', 'mode main']
+alt-shift-l = ['join-with right', 'mode main']
+
+# App rules (modern if = 'test …' syntax)
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = com.github.wez.wezterm'
+run = 'move-node-to-workspace T'
+
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = com.mitchellh.ghostty'
+run = 'move-node-to-workspace T'
+
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = com.google.Chrome'
+run = 'move-node-to-workspace B'
+
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = company.thebrowser.Browser'
+run = 'move-node-to-workspace B'
+
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = app.zen-browser.zen'
+run = 'move-node-to-workspace B'
+
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = dev.zed.Zed'
+run = 'move-node-to-workspace 1'
+
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = com.todesktop.230313mzl4w4u92'
+run = 'move-node-to-workspace 1'
+
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = com.apple.finder'
+run = 'layout floating'
+
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = com.apple.systempreferences'
+run = 'layout floating'
+
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = com.apple.SystemSettings'
+run = 'layout floating'

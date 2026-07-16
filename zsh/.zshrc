@@ -122,51 +122,43 @@ source $ZSH/oh-my-zsh.sh
 export PATH="/usr/local/opt/adoptopenjdk11/bin:$PATH"
 # eval "$(gh copilot alias -- zsh)"
 
-function hg(){
-	history | grep "$1" ;
-}
-
-
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 export PATH=$PATH:$HOME/go/bin
 
+# ---- NVM (lazy-loaded on first use) ----
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+_load_nvm() {
+  unset -f _load_nvm nvm node npm npx
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+}
+nvm()  { _load_nvm; nvm "$@"; }
+node() { _load_nvm; node "$@"; }
+npm()  { _load_nvm; npm "$@"; }
+npx()  { _load_nvm; npx "$@"; }
 
+# ---- FZF (single source; OMZ already loads zsh-syntax-highlighting) ----
+if command -v fzf >/dev/null 2>&1; then
+  source <(fzf --zsh)
+fi
 
-# ---- FZF -----
-
-# Set up fzf key bindings and fuzzy completion
-source <(fzf --zsh)
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source ~/.fzf.zsh
-
-
-# history setup
+# history setup (Atuin is primary; keep a modest native backup)
 HISTFILE=$HOME/.zhistory
-SAVEHIST=1000
-HISTSIZE=999
+SAVEHIST=5000
+HISTSIZE=5000
 setopt share_history
 setopt hist_expire_dups_first
 setopt hist_ignore_dups
 setopt hist_verify
 
-# completion using arrow keys (based on history)
 bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
 
-# ---- Eza (better ls) -----
-
+# ---- Eza / Zoxide ----
 alias ls="eza --icons=always"
-
-
-# ---- Zoxide (better cd) ----
 eval "$(zoxide init zsh)"
-
 alias cd="z"
-
 
 # ---- Secrets (API keys, tokens - not tracked by git) ----
 [[ -f ~/.zshrc.secrets ]] && source ~/.zshrc.secrets
@@ -181,24 +173,14 @@ function cursor() {
     fi
 }
 
-export PATH="/opt/homebrew/anaconda3/bin:$PATH"
+# Anaconda only if present (avoid hard PATH noise on machines without it)
+[[ -d /opt/homebrew/anaconda3/bin ]] && export PATH="/opt/homebrew/anaconda3/bin:$PATH"
 
-
-# Install vim-plug if not already installed
-if [ ! -f ~/.vim/autoload/plug.vim ]; then
-  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-fi
-
-# Ensure Vim plugins are installed
-if [ ! -d ~/.vim/plugged ]; then
-  echo "Installing vim plugins..."
-  vim +'PlugInstall --sync' +qa
-fi
 export PATH="/usr/local/opt/openjdk/bin:$PATH"
 
-# --- Yazi setup ---
+# --- Editor / Yazi ---
 export EDITOR="nvim"
+export VISUAL="nvim"
 
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
@@ -209,6 +191,11 @@ function y() {
 	rm -f -- "$tmp"
 }
 
+# Daily driver aliases
+alias n="nvim"
+alias lg="lazygit"
+alias bt="btop"
+alias gq='cd "$(ghq list -p | fzf)"'
 
 eval "$(atuin init zsh)"
 
@@ -332,3 +319,18 @@ export PATH="$PATH:/Users/ravitejakarra/.lmstudio/bin"
 # End of LM Studio CLI section
 
 alias rust-book='open -a "Zen Browser" ~/dock/raviteja/rust/book/book/index.html'
+
+# Added by Antigravity IDE
+export PATH="/Users/ravitejakarra/.antigravity-ide/antigravity-ide/bin:$PATH"
+
+# >>> grok installer >>>
+export PATH="$HOME/.grok/bin:$PATH"
+fpath=(~/.grok/completions/zsh $fpath)
+autoload -Uz compinit && compinit -C
+# <<< grok installer <<<
+# Global npm bin if available (avoid slow `npm bin -g` every shell)
+[[ -d "$HOME/.npm-global/bin" ]] && export PATH="$HOME/.npm-global/bin:$PATH"
+[[ -d /opt/homebrew/bin ]] && export PATH="/opt/homebrew/bin:$PATH"
+
+# Added by Antigravity CLI installer
+export PATH="/Users/ravitejakarra/.local/bin:$PATH"

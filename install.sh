@@ -195,8 +195,7 @@ stow_packages() {
         nvim
         ghostty
         karabiner
-        yabai
-        skhd
+        aerospace
         sketchybar
         lazygit
         yazi
@@ -357,7 +356,7 @@ create_github_repo() {
 # ============================================================================
 start_services() {
     echo ""
-    read -p "$(echo -e "${YELLOW}Start yabai, skhd, and sketchybar services? (y/n): ${NC}")" -n 1 -r
+    read -p "$(echo -e "${YELLOW}Start sketchybar service? (y/n): ${NC}")" -n 1 -r
     echo ""
 
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
@@ -366,9 +365,8 @@ start_services() {
     fi
 
     info "Starting services..."
-    brew services start yabai 2>/dev/null && success "yabai started" || warn "yabai failed to start"
-    brew services start skhd 2>/dev/null && success "skhd started" || warn "skhd failed to start"
     brew services start sketchybar 2>/dev/null && success "sketchybar started" || warn "sketchybar failed to start"
+    info "AeroSpace is a cask app with start-at-login; open it once if needed: open -a AeroSpace"
 }
 
 # ============================================================================
