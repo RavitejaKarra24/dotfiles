@@ -12,6 +12,15 @@ fi
 
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
 
+# Keep package metadata fresh when running `brew upgrade`. Homebrew separately
+# caches repository updates for 24 hours and formula/cask API data for 450
+# seconds, which can hide newly published packages until a manual update.
+unset HOMEBREW_AUTO_UPDATE_CHECKED HOMEBREW_AUTO_UPDATE_COMMAND
+unset HOMEBREW_AUTO_UPDATING HOMEBREW_COMMAND_DEPTH HOMEBREW_API_UPDATED
+unset HOMEBREW_BREW_FILE HOMEBREW_PATH
+export HOMEBREW_AUTO_UPDATE_SECS=0
+export HOMEBREW_API_AUTO_UPDATE_SECS=0
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
