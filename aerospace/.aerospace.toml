@@ -33,7 +33,11 @@ persistent-workspaces = [
 ]
 
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-on-focus-changed = ['move-mouse window-lazy-center']
+
+# Keep application focus under macOS control. Warping the pointer on every
+# window focus can immediately hand focus back to the window under the cursor
+# (for example, WezTerm after running `open .`).
+focus-follows-mouse.enabled = false
 
 [gaps]
 inner.horizontal = 0
