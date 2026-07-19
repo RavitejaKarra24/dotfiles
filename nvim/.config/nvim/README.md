@@ -17,7 +17,8 @@ This is a minimal coding-focused Neovim setup.
 - `<leader>ps` -> grep prompt (Telescope)
 - `<leader>pg` -> live grep (Telescope)
 
-Oil is the default file explorer (`show_hidden = true`). Press `q` to close.
+Oil is the default file explorer (`show_hidden = true`). Press `d` to create a
+directory, `%` to create a file, and `q` to close.
 
 ### FFF Picker
 
