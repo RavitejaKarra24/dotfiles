@@ -31,7 +31,7 @@ local function resolve_colorscheme()
   return DEFAULT_COLORSCHEME
 end
 
-local function make_background_transparent()
+local function apply_ui_highlights()
   local transparent_groups = {
     "Normal",
     "NormalNC",
@@ -48,6 +48,12 @@ local function make_background_transparent()
   for _, group in ipairs(transparent_groups) do
     vim.api.nvim_set_hl(0, group, { bg = "none" })
   end
+
+  -- Keep OneDark's slate selection color, with more contrast for transparency.
+  local selection = { bg = "#4B5263" }
+  vim.api.nvim_set_hl(0, "Visual", selection)
+  vim.api.nvim_set_hl(0, "VisualNOS", selection)
+  vim.api.nvim_set_hl(0, "ModeMsg", { fg = "#FFB454", bold = true })
 end
 
 local function apply_colorscheme()
@@ -58,7 +64,7 @@ local function apply_colorscheme()
     pcall(vim.cmd.colorscheme, DEFAULT_COLORSCHEME)
   end
 
-  make_background_transparent()
+  apply_ui_highlights()
 end
 
 return {
@@ -76,11 +82,10 @@ return {
     },
     config = function()
       vim.api.nvim_create_autocmd("ColorScheme", {
-        callback = make_background_transparent,
+        callback = apply_ui_highlights,
       })
 
       apply_colorscheme()
     end,
   },
 }
-

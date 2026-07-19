@@ -18,6 +18,19 @@ set termguicolors     " enable true colors support
 let ayucolor="dark"   " for dark version of theme
 colorscheme ayu
 
+" Keep Ayu's slate selection color, with more contrast for transparent terminals.
+" Reapply after every colorscheme change so the theme cannot overwrite them.
+augroup HighContrastVisualSelection
+    autocmd!
+    autocmd ColorScheme * highlight Visual    guifg=NONE guibg=#3B5266 gui=NONE ctermfg=NONE ctermbg=DarkGray cterm=NONE
+    autocmd ColorScheme * highlight VisualNOS guifg=NONE guibg=#3B5266 gui=NONE ctermfg=NONE ctermbg=DarkGray cterm=NONE
+    autocmd ColorScheme * highlight ModeMsg   guifg=#FFB454 guibg=NONE    gui=bold ctermfg=Yellow ctermbg=NONE cterm=bold
+augroup END
+highlight Visual    guifg=NONE guibg=#3B5266 gui=NONE ctermfg=NONE ctermbg=DarkGray cterm=NONE
+highlight VisualNOS guifg=NONE guibg=#3B5266 gui=NONE ctermfg=NONE ctermbg=DarkGray cterm=NONE
+highlight ModeMsg   guifg=#FFB454 guibg=NONE    gui=bold ctermfg=Yellow ctermbg=NONE cterm=bold
+set showmode
+
 let mapleader=" "
 nnoremap <leader>pv :Vex<CR>
 nnoremap <leader><CR> :so ~/.vimrc<CR>
