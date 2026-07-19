@@ -68,8 +68,6 @@
 
             // Terminal
             "space t t": "terminal_panel::ToggleFocus",
-            "space t h": ["workspace::SendKeystrokes", "ctrl-w s ctrl-`"],
-            "space t v": ["workspace::SendKeystrokes", "ctrl-w v ctrl-`"],
 
             // Zed config access
             "space v p p": "zed::OpenSettingsFile",
