@@ -7,7 +7,13 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
   {
+    "autosave": {
+    "after_delay": {
+      "milliseconds": 1000
+    }
+  },
     "edit_predictions": {
+        "allow_data_collection": "no",
         "provider": "zed"
     },
     "outline_panel": {
@@ -17,6 +23,13 @@
         "dock": "left"
     },
     "agent": {
+        "default_model": {
+            "provider": "zed.dev",
+            "model": "gpt-5.6-luna",
+            "enable_thinking": false,
+            "effort": "low"
+        },
+        "default_profile": "ask",
         "dock": "right",
         "favorite_models": [],
         "model_parameters": []
