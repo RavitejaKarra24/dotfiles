@@ -205,6 +205,7 @@ stow_packages() {
         spotify-player
         calcure
         zed
+        pi
     )
 
     info "Creating backup directory: $BACKUP_DIR"
@@ -245,7 +246,49 @@ stow_packages() {
 }
 
 # ============================================================================
-# 12. Secrets file template
+# 12. pi coding agent (global CLI + agent deps)
+# ============================================================================
+install_pi() {
+    if command -v pi &>/dev/null; then
+        success "pi already installed ($(pi --version 2>/dev/null || echo present))"
+        return
+    fi
+
+    if ! command -v npm &>/dev/null; then
+        warn "npm not found; skip pi install (install node first)"
+        return
+    fi
+
+    info "Installing @earendil-works/pi-coding-agent globally..."
+    npm install -g @earendil-works/pi-coding-agent
+    success "pi installed"
+}
+
+setup_pi_agent() {
+    local agent_dir="$HOME/.pi/agent"
+
+    if [ ! -f "$agent_dir/package.json" ]; then
+        warn "pi agent config missing at ~/.pi/agent (stow pi package first)"
+        return
+    fi
+
+    if ! command -v npm &>/dev/null; then
+        warn "npm not found; skip pi agent npm install"
+        return
+    fi
+
+    info "Installing pi agent dependencies (extensions)..."
+    (cd "$agent_dir" && npm install)
+    success "pi agent dependencies installed"
+
+    if [ ! -f "$agent_dir/.env" ] && [ -f "$agent_dir/.env.example" ]; then
+        cp "$agent_dir/.env.example" "$agent_dir/.env"
+        warn "Created ~/.pi/agent/.env — set FIRECRAWL_API_KEY if you use firecrawl tools"
+    fi
+}
+
+# ============================================================================
+# 13. Secrets file template
 # ============================================================================
 setup_secrets() {
     if [ -f "$HOME/.zshrc.secrets" ]; then
@@ -265,13 +308,15 @@ export XAI_API_KEY=""
 export GEMINI_API_KEY=""
 export OPENAI_API_KEY=""
 export KAMAL_REGISTRY_PASSWORD=""
+# Optional: also used by some tools; pi firecrawl uses ~/.pi/agent/.env
+export FIRECRAWL_API_KEY=""
 SECRETS_EOF
         warn "Edit ~/.zshrc.secrets and add your API keys"
     fi
 }
 
 # ============================================================================
-# 13. macOS Defaults (optional)
+# 14. macOS Defaults (optional)
 # ============================================================================
 set_macos_defaults() {
     echo ""
@@ -394,9 +439,13 @@ main() {
     install_rust
     install_nvm
     install_bun
+    install_pi
 
     # Symlink configs
     stow_packages
+
+    # pi agent deps after stow (package.json lives under ~/.pi/agent)
+    setup_pi_agent
 
     # Secrets
     setup_secrets
@@ -413,9 +462,10 @@ main() {
     echo "Next steps:"
     echo "  1. Restart your terminal (or run: source ~/.zshrc)"
     echo "  2. Edit ~/.zshrc.secrets with your API keys"
-    echo "  3. In tmux, press prefix + I to install tmux plugins"
-    echo "  4. In vim, run :PlugInstall to install vim plugins"
-    echo "  5. Open Neovim to let lazy.nvim sync plugins"
+    echo "  3. Optional: set FIRECRAWL_API_KEY in ~/.pi/agent/.env for pi firecrawl tools"
+    echo "  4. In tmux, press prefix + I to install tmux plugins"
+    echo "  5. In vim, run :PlugInstall to install vim plugins"
+    echo "  6. Open Neovim to let lazy.nvim sync plugins"
     echo ""
 }
 

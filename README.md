@@ -27,6 +27,7 @@ Safe to re-run: `~/.dotfiles/install.sh`
 | `git/` | Global gitconfig (delta, aliases) |
 | `yazi/` | File manager TUI |
 | `btop/` | System monitor |
+| `pi/` | pi coding agent global config (`~/.pi/agent`) |
 | `Brewfile` | All Homebrew packages/casks |
 | `install.sh` | Bootstrap: brew, stow, services |
 
@@ -92,6 +93,17 @@ Full map: [`nvim/.config/nvim/README.md`](nvim/.config/nvim/README.md).
 - **Ghostty**: deep_ocean palette (was coolnight)
 - **btop**: v1.4.7 options (GPU graphs, presets, mouse, etc.)
 - **Karabiner**: Caps hold = Meh; alone = Escape (for AeroSpace)
+
+## pi coding agent
+
+Stow package `pi/` → `~/.pi/agent` (extensions, theme, settings, package deps).
+
+- Installer runs `npm install -g @earendil-works/pi-coding-agent` if needed, then `npm install` in `~/.pi/agent`
+- Theme: `github-dark-default`; package `npm:pi-spark` with its dark theme filtered to avoid collisions
+- Secrets stay local: `auth.json`, `.env`, `sessions/`, `models-store.json` (not in git)
+- Optional Firecrawl: `FIRECRAWL_API_KEY` in `~/.pi/agent/.env`
+
+Details: [`pi/README.md`](pi/README.md).
 
 ## Changelog (since last commit)
 

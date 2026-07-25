@@ -1,0 +1,41 @@
+{
+  "lastChangelogVersion": "0.82.0",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.6-sol",
+  "theme": "github-dark-default",
+  "defaultThinkingLevel": "high",
+  "skills": [
+    "-skills/apply-grant",
+    "-skills/build-data-pipeline",
+    "-skills/build-defi-protocol",
+    "-skills/build-mobile",
+    "-skills/build-with-claude",
+    "-skills/colosseum-copilot",
+    "-skills/competitive-landscape",
+    "-skills/create-pitch-deck",
+    "-skills/debug-program",
+    "-skills/defillama-research",
+    "-skills/deploy-to-mainnet",
+    "-skills/design-taste",
+    "-skills/find-next-crypto-idea",
+    "-skills/launch-token",
+    "-skills/marketing-video",
+    "-skills/navigate-skills",
+    "-skills/number-formatting",
+    "-skills/review-and-iterate",
+    "-skills/scaffold-project",
+    "-skills/solana-beginner",
+    "-skills/submit-to-hackathon",
+    "-skills/validate-idea",
+    "-skills/video-craft",
+    "-skills/virtual-solana-incubator"
+  ],
+  "packages": [
+    {
+      "source": "npm:pi-spark",
+      "themes": [
+        "!themes/github-dark-default.json"
+      ]
+    }
+  ]
+}
