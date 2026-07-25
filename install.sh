@@ -346,8 +346,13 @@ setup_pi_agent() {
         return
     fi
 
-    info "Installing pi agent dependencies (extensions)..."
-    (cd "$agent_dir" && npm install)
+    # Extensions resolve modules from the real stow path (package.json target),
+    # not ~/.pi/agent — so install node_modules next to the real package.json.
+    local install_dir
+    install_dir="$(cd "$(dirname "$(realpath "$agent_dir/package.json")")" && pwd)"
+
+    info "Installing pi agent dependencies (extensions) in $install_dir ..."
+    (cd "$install_dir" && npm install --no-fund --no-audit)
     success "pi agent dependencies installed"
 
     link_pi_shared_skills

@@ -34,7 +34,9 @@ Manual:
 stow -d ~/.dotfiles -t ~ --no-folding agents
 stow -d ~/.dotfiles -t ~ --no-folding pi
 npm install -g @earendil-works/pi-coding-agent
-cd ~/.pi/agent && npm install
+# Install next to the *real* package.json (stow target). Extensions resolve
+# modules from that path, not from ~/.pi/agent/node_modules alone.
+cd "$(dirname "$(realpath ~/.pi/agent/package.json)")" && npm install
 # link shared skills into pi (or re-run install.sh setup)
 for s in ~/.agents/skills/*; do
   name=$(basename "$s")
