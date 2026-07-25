@@ -42,6 +42,19 @@ spotify-player/.config/spotify-player/.spotify_token_cache*
 # Node modules (if any sneak in)
 node_modules/
 
+# Codex — track only durable config; never auth or runtime state
+codex/.codex/*
+!codex/.codex/AGENTS.md
+!codex/.codex/config.toml
+!codex/.codex/keybindings.json
+!codex/.codex/rules/
+codex/.codex/rules/*
+!codex/.codex/rules/default.rules
+!codex/.codex/skills/
+codex/.codex/skills/*
+!codex/.codex/skills/skill-router/
+!codex/.codex/skills/skill-router/**
+
 # pi coding agent — runtime / secrets (never commit)
 pi/.pi/agent/.env
 pi/.pi/agent/auth.json

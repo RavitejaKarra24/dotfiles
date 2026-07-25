@@ -1,0 +1,197 @@
+model = "gpt-5.6-sol"
+model_reasoning_effort = "high"
+
+notify = ["/Users/ravitejakarra/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
+service_tier = "default"
+approvals_reviewer = "user"
+plan_mode_reasoning_effort = "high"
+
+[projects."/Users/ravitejakarra/.config/nvim"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/raviteja/colosseum"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/Documents/New project"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/raviteja/rust/weather_app_by_gemini"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/.dotfiles"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/raviteja/MyLife"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/raviteja/Twitter_plugin"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai/rustforge"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai/codecrafters_clone"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/Documents/beautiful_website"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/master_every_topic/txtscrpr"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai/marina_karlova/transcripts"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai/text_to_pdf"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai/system_design"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai/system_design_with_ai"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/raviteja/resume"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai/system_monitoring"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai/eq_for_mac"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/obsidian_for_me"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai/youtube_stats"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai/color_grading_for_mac"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/raviteja/zmk/unified-zmk-config-template"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai/color_grading_for_firefox"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai/voice_remover"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/raviteja/solana/ai_built_before_me/money_transfer"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai/live_video_animator"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai/apple_music_tui"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai/apple_music_tui_by_codex"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/Documents/Codex/2026-07-24/realtime-voice-chat"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai/time_tracker"]
+trust_level = "trusted"
+
+[projects."/Users/ravitejakarra/dock/experiments_with_ai"]
+trust_level = "trusted"
+
+[features]
+multi_agent = true
+js_repl = false
+
+[notice.model_migrations]
+"gpt-5.3-codex" = "gpt-5.4"
+
+[marketplaces.openai-bundled]
+last_updated = "2026-07-24T00:35:10Z"
+source_type = "local"
+source = "/Users/ravitejakarra/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.openai-primary-runtime]
+last_updated = "2026-07-24T11:46:36Z"
+source_type = "local"
+source = "/Users/ravitejakarra/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+
+[tui.model_availability_nux]
+"gpt-5.5" = 4
+"gpt-5.6-sol" = 4
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."sites@openai-bundled"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."visualize@openai-bundled"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
+[desktop]
+default-service-tier = "priority"
+followUpQueueMode = "queue"
+dock-icon-preference = "codex-system"
+conversationDetailMode = "STEPS_COMMANDS"
+realtimeVoiceScreenContextEnabled = true
+
+[desktop.open-in-target-preferences]
+global = "ghostty"
+
+[desktop.open-in-target-preferences.perPath]
+"/Users/ravitejakarra/Documents/New project" = "ghostty"
+
+[mcp_servers.node_repl]
+args = []
+command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
+startup_timeout_sec = 120
+
+[mcp_servers.node_repl.env]
+NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
+NODE_REPL_NODE_MODULE_DIRS = "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
+NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/ravitejakarra/.codex"
+CODEX_HOME = "/Users/ravitejakarra/.codex"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "41e1151f1e50f096c7561da32bb01123e74b6ecdd38f081e34da30091fc4f193,6d25aa7656feac858f3a3bdaea5bcbab0dbfd426c9de8e6931ce90c399ee8e4f"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
+NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use."
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.721.30844"
+CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
+
+[mcp_servers.computer-use]
+command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
+args = ["mcp"]
+cwd = "."
+enabled = false
+[shell_environment_policy.set]
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "41e1151f1e50f096c7561da32bb01123e74b6ecdd38f081e34da30091fc4f193,6d25aa7656feac858f3a3bdaea5bcbab0dbfd426c9de8e6931ce90c399ee8e4f"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/ravitejakarra/.codex"
+
+################################################################################
+# Dynamic skill routing: keep every installed skill enabled and available for
+# explicit loading, but do not inject the full global catalog into every thread.
+# ~/.codex/AGENTS.md invokes the on-demand router before substantive work.
+################################################################################
+
+[skills]
+include_instructions = false

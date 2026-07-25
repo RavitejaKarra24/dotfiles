@@ -206,6 +206,7 @@ stow_packages() {
         calcure
         zed
         agents
+        codex
         pi
     )
 

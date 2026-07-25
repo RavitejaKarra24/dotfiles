@@ -28,6 +28,7 @@ Safe to re-run: `~/.dotfiles/install.sh`
 | `yazi/` | File manager TUI |
 | `btop/` | System monitor |
 | `pi/` | pi coding agent global config (`~/.pi/agent`) — extensions, themes, pi-local skills |
+| `codex/` | Codex config (`~/.codex`) — settings, instructions, keybindings, rules, skill router |
 | `agents/` | Shared agent skills (`~/.agents/skills`) used by pi, Claude, Codex, Grok, … |
 | `Brewfile` | All Homebrew packages/casks |
 | `install.sh` | Bootstrap: brew, stow, services |
@@ -106,6 +107,14 @@ Stow package `pi/` → `~/.pi/agent` (extensions, theme, settings, package deps)
 
 Details: [`pi/README.md`](pi/README.md).
 
+## Codex
+
+Stow package `codex/` links only durable configuration into the existing `~/.codex/` directory. Authentication, sessions, history, caches, generated files, and other runtime state remain machine-local.
+
+Because the live files are Stow symlinks, edits made through `~/.codex/config.toml` (or the other tracked config paths) update this repository directly.
+
+Details: [`codex/README.md`](codex/README.md).
+
 ## Changelog (since last commit)
 
 Working-tree changes documented in this README and the nvim README:
@@ -117,3 +126,4 @@ Working-tree changes documented in this README and the nvim README:
 5. **Theme alignment** — Ghostty deep_ocean; lazygit colors match
 6. **Brewfile** — fastfetch, git-delta, ctop; drop yabai/skhd/neofetch
 7. **Karabiner** — Caps → Meh + Escape alone
+8. **Codex** — add portable Stow-managed config without auth or runtime state
