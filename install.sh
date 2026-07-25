@@ -205,6 +205,7 @@ stow_packages() {
         spotify-player
         calcure
         zed
+        agents
         pi
     )
 
@@ -264,6 +265,74 @@ install_pi() {
     success "pi installed"
 }
 
+# Link shared ~/.agents/skills into ~/.pi/agent/skills (pi-local skills take priority)
+link_pi_shared_skills() {
+    local agents_skills="$HOME/.agents/skills"
+    local pi_skills="$HOME/.pi/agent/skills"
+
+    if [ ! -d "$agents_skills" ]; then
+        warn "No ~/.agents/skills (stow agents package first); skip pi skill links"
+        return
+    fi
+
+    mkdir -p "$pi_skills"
+
+    local linked=0
+    local skipped=0
+    local name target dest
+
+    for target in "$agents_skills"/*; do
+        [ -e "$target" ] || continue
+        name="$(basename "$target")"
+        dest="$pi_skills/$name"
+
+        # Keep pi-local / stowed skills (real dirs or already-correct links)
+        if [ -e "$dest" ] || [ -L "$dest" ]; then
+            if [ -L "$dest" ]; then
+                # Refresh symlink if it points elsewhere
+                local current
+                current="$(readlink "$dest" 2>/dev/null || true)"
+                if [ "$current" = "../../../.agents/skills/$name" ] || [ "$current" = "$target" ]; then
+                    skipped=$((skipped + 1))
+                    continue
+                fi
+                rm -f "$dest"
+            else
+                # Real directory (pi package skill) — do not replace
+                skipped=$((skipped + 1))
+                continue
+            fi
+        fi
+
+        ln -s "../../../.agents/skills/$name" "$dest"
+        linked=$((linked + 1))
+    done
+
+    success "pi shared skills: linked=$linked kept/skipped=$skipped"
+}
+
+# npm install for pi-skills packages that ship package.json (brave-search, browser-tools, …)
+install_pi_skill_deps() {
+    local pi_skills="$HOME/.pi/agent/skills"
+    [ -d "$pi_skills" ] || return
+
+    if ! command -v npm &>/dev/null; then
+        warn "npm not found; skip pi skill package installs"
+        return
+    fi
+
+    local pkg_json dir
+    while IFS= read -r pkg_json; do
+        dir="$(dirname "$pkg_json")"
+        # Skip if node_modules already present
+        if [ -d "$dir/node_modules" ]; then
+            continue
+        fi
+        info "npm install in ${dir/#$HOME/~}..."
+        (cd "$dir" && npm install --no-fund --no-audit)
+    done < <(find "$pi_skills" -name package.json ! -path '*/node_modules/*' 2>/dev/null)
+}
+
 setup_pi_agent() {
     local agent_dir="$HOME/.pi/agent"
 
@@ -280,6 +349,9 @@ setup_pi_agent() {
     info "Installing pi agent dependencies (extensions)..."
     (cd "$agent_dir" && npm install)
     success "pi agent dependencies installed"
+
+    link_pi_shared_skills
+    install_pi_skill_deps
 
     if [ ! -f "$agent_dir/.env" ] && [ -f "$agent_dir/.env.example" ]; then
         cp "$agent_dir/.env.example" "$agent_dir/.env"

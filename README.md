@@ -27,7 +27,8 @@ Safe to re-run: `~/.dotfiles/install.sh`
 | `git/` | Global gitconfig (delta, aliases) |
 | `yazi/` | File manager TUI |
 | `btop/` | System monitor |
-| `pi/` | pi coding agent global config (`~/.pi/agent`) |
+| `pi/` | pi coding agent global config (`~/.pi/agent`) — extensions, themes, pi-local skills |
+| `agents/` | Shared agent skills (`~/.agents/skills`) used by pi, Claude, Codex, Grok, … |
 | `Brewfile` | All Homebrew packages/casks |
 | `install.sh` | Bootstrap: brew, stow, services |
 

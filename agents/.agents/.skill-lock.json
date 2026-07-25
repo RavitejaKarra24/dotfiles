@@ -1,0 +1,829 @@
+{
+  "version": 3,
+  "skills": {
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/skills.git",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "skillFolderHash": "3013fdeb8a11b10b1eb795ec3ae8bfca38f7c26d",
+      "installedAt": "2026-03-30T09:18:04.954Z",
+      "updatedAt": "2026-03-30T09:18:04.954Z"
+    },
+    "docx": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/docx/SKILL.md",
+      "skillFolderHash": "6e6f5b95c1de6e803cc07b214f5059b074d64e0c",
+      "pluginName": "document-skills",
+      "installedAt": "2026-07-21T14:31:25.725Z",
+      "updatedAt": "2026-07-21T14:31:25.725Z"
+    },
+    "pdf": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/pdf/SKILL.md",
+      "skillFolderHash": "6369f4649de69bd6857c9bc3b058a77206009238",
+      "pluginName": "document-skills",
+      "installedAt": "2026-07-21T14:31:45.581Z",
+      "updatedAt": "2026-07-21T14:31:45.581Z"
+    },
+    "pptx": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/pptx/SKILL.md",
+      "skillFolderHash": "64529c8b3f35fe632b7256bd2f6d46e4b40160ce",
+      "pluginName": "document-skills",
+      "installedAt": "2026-07-21T14:32:10.867Z",
+      "updatedAt": "2026-07-21T14:32:10.867Z"
+    },
+    "xlsx": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/xlsx/SKILL.md",
+      "skillFolderHash": "fe6471cc9b5b97aae0b576ccb92ffd9b0207589d",
+      "pluginName": "document-skills",
+      "installedAt": "2026-07-21T14:32:33.301Z",
+      "updatedAt": "2026-07-21T14:32:33.301Z"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "skillFolderHash": "0d5b74a14bdf3ebcd64f352d06376a2ef05ed296",
+      "pluginName": "example-skills",
+      "installedAt": "2026-07-21T14:32:54.731Z",
+      "updatedAt": "2026-07-21T14:32:54.731Z"
+    },
+    "webapp-testing": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/webapp-testing/SKILL.md",
+      "skillFolderHash": "5ffb7dc66b9fd4c25c3e400a4c00da99a349b714",
+      "pluginName": "example-skills",
+      "installedAt": "2026-07-21T14:33:13.601Z",
+      "updatedAt": "2026-07-21T14:33:13.601Z"
+    },
+    "mcp-builder": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/mcp-builder/SKILL.md",
+      "skillFolderHash": "b866bcfb57b780c10b587c7b543e871a91661ce0",
+      "pluginName": "example-skills",
+      "installedAt": "2026-07-21T14:33:40.411Z",
+      "updatedAt": "2026-07-21T14:33:40.411Z"
+    },
+    "skill-creator": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/skill-creator/SKILL.md",
+      "skillFolderHash": "3cf9a8db32597ba3e24b584a3d696f4e11c7d7b6",
+      "pluginName": "example-skills",
+      "installedAt": "2026-07-21T14:34:01.917Z",
+      "updatedAt": "2026-07-21T14:34:01.917Z"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "skillFolderHash": "3116f3e62dbd02b44a598b1aa690d2a8938e8f89",
+      "installedAt": "2026-07-21T14:34:15.263Z",
+      "updatedAt": "2026-07-21T14:34:15.263Z"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/react-best-practices/SKILL.md",
+      "skillFolderHash": "343db72180d05814949fef7d46be96b5c6ee86b3",
+      "installedAt": "2026-07-21T14:34:32.154Z",
+      "updatedAt": "2026-07-21T14:34:32.154Z"
+    },
+    "vercel-composition-patterns": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/composition-patterns/SKILL.md",
+      "skillFolderHash": "bf90d0a4b83ea054653350f9c67f6de235d3a368",
+      "installedAt": "2026-07-21T14:34:35.081Z",
+      "updatedAt": "2026-07-21T14:34:35.081Z"
+    },
+    "macos-patterns": {
+      "source": "fayazara/macos-app-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/fayazara/macos-app-skills.git",
+      "skillPath": "macos-patterns/SKILL.md",
+      "skillFolderHash": "8d729c6b4616b233b7a3ed322d9a8bfc7d7ef269",
+      "installedAt": "2026-07-21T14:39:32.428Z",
+      "updatedAt": "2026-07-21T14:39:32.428Z"
+    },
+    "macos-build": {
+      "source": "fayazara/macos-app-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/fayazara/macos-app-skills.git",
+      "skillPath": "build/SKILL.md",
+      "skillFolderHash": "642028670addbc263a9d19500452da4cf93eea48",
+      "installedAt": "2026-07-21T14:39:35.272Z",
+      "updatedAt": "2026-07-21T14:39:35.272Z"
+    },
+    "macos-settings-ui": {
+      "source": "fayazara/macos-app-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/fayazara/macos-app-skills.git",
+      "skillPath": "settings-ui/SKILL.md",
+      "skillFolderHash": "3ecd3e9bef7b1860cbffa767d6d08e88300865dc",
+      "installedAt": "2026-07-21T14:39:38.558Z",
+      "updatedAt": "2026-07-21T14:39:38.558Z"
+    },
+    "macos-release": {
+      "source": "fayazara/macos-app-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/fayazara/macos-app-skills.git",
+      "skillPath": "release/SKILL.md",
+      "skillFolderHash": "1d7e710fb1855cf223b9da5e506c0aac372833df",
+      "installedAt": "2026-07-21T14:39:41.974Z",
+      "updatedAt": "2026-07-21T14:39:41.974Z"
+    },
+    "macos-auto-update": {
+      "source": "fayazara/macos-app-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/fayazara/macos-app-skills.git",
+      "skillPath": "auto-update/SKILL.md",
+      "skillFolderHash": "1b5b70439fb497e1aeb113ef14345fca67c61726",
+      "installedAt": "2026-07-21T14:39:44.951Z",
+      "updatedAt": "2026-07-21T14:39:44.951Z"
+    },
+    "macos-notch-ui": {
+      "source": "fayazara/macos-app-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/fayazara/macos-app-skills.git",
+      "skillPath": "notch-ui/SKILL.md",
+      "skillFolderHash": "3ca7b83fcd7028bc4bae0b61c5c90d379de9f458",
+      "installedAt": "2026-07-21T14:39:47.844Z",
+      "updatedAt": "2026-07-21T14:39:47.844Z"
+    },
+    "swiftui-expert-skill": {
+      "source": "avdlee/swiftui-agent-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/avdlee/swiftui-agent-skill.git",
+      "skillPath": "swiftui-expert-skill/SKILL.md",
+      "skillFolderHash": "813404b84a2b3de4f920be8671971bcb014d82ef",
+      "pluginName": "swiftui-expert",
+      "installedAt": "2026-07-21T14:39:51.555Z",
+      "updatedAt": "2026-07-21T14:39:51.555Z"
+    },
+    "swiftui-pro": {
+      "source": "twostraws/swiftui-agent-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/twostraws/swiftui-agent-skill.git",
+      "skillPath": "swiftui-pro/SKILL.md",
+      "skillFolderHash": "09b8fff9743cfc94eea3ada3727e3ec369ff10fb",
+      "installedAt": "2026-07-21T14:39:54.519Z",
+      "updatedAt": "2026-07-21T14:39:54.519Z"
+    },
+    "swift-concurrency": {
+      "source": "avdlee/swift-concurrency-agent-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/avdlee/swift-concurrency-agent-skill.git",
+      "skillPath": "swift-concurrency/SKILL.md",
+      "skillFolderHash": "1fb2509bd3df27809ff1f8ff0beed2f5b7c51ca6",
+      "pluginName": "swift-concurrency",
+      "installedAt": "2026-07-21T14:39:59.408Z",
+      "updatedAt": "2026-07-21T14:39:59.408Z"
+    },
+    "macos-spm-app-packaging": {
+      "source": "dimillian/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/dimillian/skills.git",
+      "skillPath": "macos-spm-app-packaging/SKILL.md",
+      "skillFolderHash": "86940aac97b410a2b22af26356d8078e303dbb25",
+      "installedAt": "2026-07-21T14:40:03.561Z",
+      "updatedAt": "2026-07-21T14:40:03.561Z"
+    },
+    "swiftui-ui-patterns": {
+      "source": "dimillian/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/dimillian/skills.git",
+      "skillPath": "swiftui-ui-patterns/SKILL.md",
+      "skillFolderHash": "c980bf057e992cf8087fcbc9f66c0f83921c15f7",
+      "installedAt": "2026-07-21T14:40:08.149Z",
+      "updatedAt": "2026-07-21T14:40:08.149Z"
+    },
+    "swiftui-performance-audit": {
+      "source": "dimillian/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/dimillian/skills.git",
+      "skillPath": "swiftui-performance-audit/SKILL.md",
+      "skillFolderHash": "42390e917faf94ffab98087990bcb1445cd7f7c9",
+      "installedAt": "2026-07-21T14:40:12.673Z",
+      "updatedAt": "2026-07-21T14:40:12.673Z"
+    },
+    "macos-design-guidelines": {
+      "source": "ehmo/platform-design-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/ehmo/platform-design-skills.git",
+      "skillPath": "skills/macos/SKILL.md",
+      "skillFolderHash": "e0d7bccfcde02ddc429c2c1cd40f8c20be9ebb30",
+      "installedAt": "2026-07-21T14:40:33.719Z",
+      "updatedAt": "2026-07-21T14:40:33.719Z"
+    },
+    "macos-development": {
+      "source": "rshankras/claude-code-apple-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/rshankras/claude-code-apple-skills.git",
+      "skillPath": "skills/macos/SKILL.md",
+      "skillFolderHash": "b75d91acf7e22515e8a7a50aa5a725d743963dbd",
+      "installedAt": "2026-07-21T14:40:53.654Z",
+      "updatedAt": "2026-07-21T14:40:53.654Z"
+    },
+    "minimalist-ui": {
+      "source": "leonxlnx/taste-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/leonxlnx/taste-skill.git",
+      "skillPath": "skills/minimalist-skill/SKILL.md",
+      "skillFolderHash": "5509c012862cda27e2ed7efae89ed940ecc53add",
+      "installedAt": "2026-07-21T17:18:54.178Z",
+      "updatedAt": "2026-07-21T17:18:54.178Z"
+    },
+    "redesign-existing-projects": {
+      "source": "leonxlnx/taste-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/leonxlnx/taste-skill.git",
+      "skillPath": "skills/redesign-skill/SKILL.md",
+      "skillFolderHash": "d9cffe56d26d4af7687299e391a7be1cfaf46c1b",
+      "installedAt": "2026-07-21T17:18:54.182Z",
+      "updatedAt": "2026-07-21T17:18:54.182Z"
+    },
+    "high-end-visual-design": {
+      "source": "leonxlnx/taste-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/leonxlnx/taste-skill.git",
+      "skillPath": "skills/soft-skill/SKILL.md",
+      "skillFolderHash": "1b5943432ddd1b980206968c529a323cc992dbec",
+      "installedAt": "2026-07-21T17:18:54.183Z",
+      "updatedAt": "2026-07-21T17:18:54.183Z"
+    },
+    "design-taste-frontend": {
+      "source": "leonxlnx/taste-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/leonxlnx/taste-skill.git",
+      "skillPath": "skills/taste-skill/SKILL.md",
+      "skillFolderHash": "a6d128e53b4ec0238baee751dde33bf707adb5ec",
+      "installedAt": "2026-07-21T17:18:54.183Z",
+      "updatedAt": "2026-07-21T17:18:54.183Z"
+    },
+    "shadcn": {
+      "source": "shadcn/ui",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/shadcn/ui.git",
+      "skillPath": "skills/shadcn/SKILL.md",
+      "skillFolderHash": "962eb7ef77f17e0bce530153d4fec2136c5fa061",
+      "installedAt": "2026-07-21T17:19:01.497Z",
+      "updatedAt": "2026-07-21T17:19:01.497Z"
+    },
+    "ui-ux-pro-max": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+      "skillPath": ".claude/skills/ui-ux-pro-max/SKILL.md",
+      "skillFolderHash": "e36b015761c3bd5e2b6977323db9b105b4cd8d5f",
+      "installedAt": "2026-07-21T17:19:06.297Z",
+      "updatedAt": "2026-07-21T17:19:06.297Z"
+    },
+    "vercel-react-view-transitions": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/react-view-transitions/SKILL.md",
+      "skillFolderHash": "394c075e3b28315afc5fe1a6b4492ec20cb2a89f",
+      "installedAt": "2026-07-21T17:19:08.572Z",
+      "updatedAt": "2026-07-21T17:19:08.572Z"
+    },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/pbakaus/impeccable.git",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "skillFolderHash": "a0af421116f41796bf3d61c9f2256f98c05e9a76",
+      "installedAt": "2026-07-21T17:19:20.810Z",
+      "updatedAt": "2026-07-21T17:19:20.810Z"
+    },
+    "accessibility": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/addyosmani/web-quality-skills.git",
+      "skillPath": "skills/accessibility/SKILL.md",
+      "skillFolderHash": "abdb452337317f5840e4298e46ad07663342dbe8",
+      "installedAt": "2026-07-21T17:19:23.666Z",
+      "updatedAt": "2026-07-21T17:19:23.666Z"
+    },
+    "best-practices": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/addyosmani/web-quality-skills.git",
+      "skillPath": "skills/best-practices/SKILL.md",
+      "skillFolderHash": "31953d33750e2be4444cf4f0bb8b2fd386116d50",
+      "installedAt": "2026-07-21T17:19:23.668Z",
+      "updatedAt": "2026-07-21T17:19:23.668Z"
+    },
+    "core-web-vitals": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/addyosmani/web-quality-skills.git",
+      "skillPath": "skills/core-web-vitals/SKILL.md",
+      "skillFolderHash": "041da568684b2b15ccb8789253dd2df29c8de433",
+      "installedAt": "2026-07-21T17:19:23.668Z",
+      "updatedAt": "2026-07-21T17:19:23.668Z"
+    },
+    "performance": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/addyosmani/web-quality-skills.git",
+      "skillPath": "skills/performance/SKILL.md",
+      "skillFolderHash": "62de2e9d8439998bd386f06a1c8acb96877f48fe",
+      "installedAt": "2026-07-21T17:19:23.669Z",
+      "updatedAt": "2026-07-21T17:19:23.669Z"
+    },
+    "seo": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/addyosmani/web-quality-skills.git",
+      "skillPath": "skills/seo/SKILL.md",
+      "skillFolderHash": "2bef4cf1f39eec98ab6e3d2bf8ffb47619d50b6b",
+      "installedAt": "2026-07-21T17:19:23.669Z",
+      "updatedAt": "2026-07-21T17:19:23.669Z"
+    },
+    "web-quality-audit": {
+      "source": "addyosmani/web-quality-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/addyosmani/web-quality-skills.git",
+      "skillPath": "skills/web-quality-audit/SKILL.md",
+      "skillFolderHash": "a927159d150e7681018cfb1eebefa8a2c951c5fb",
+      "installedAt": "2026-07-21T17:19:23.669Z",
+      "updatedAt": "2026-07-21T17:19:23.669Z"
+    },
+    "animation-vocabulary": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/emilkowalski/skills.git",
+      "skillPath": "skills/animation-vocabulary/SKILL.md",
+      "skillFolderHash": "e6dc24ca1ff1e70c9677df9a1d2d1c80415cbb3c",
+      "installedAt": "2026-07-21T17:19:26.571Z",
+      "updatedAt": "2026-07-21T17:19:26.571Z"
+    },
+    "apple-design": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/emilkowalski/skills.git",
+      "skillPath": "skills/apple-design/SKILL.md",
+      "skillFolderHash": "e9f5b472dfb28d8cf29f64001b6c01ef94b8168b",
+      "installedAt": "2026-07-21T17:19:26.574Z",
+      "updatedAt": "2026-07-21T17:19:26.574Z"
+    },
+    "emil-design-eng": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/emilkowalski/skills.git",
+      "skillPath": "skills/emil-design-eng/SKILL.md",
+      "skillFolderHash": "175725745e70946d891b93a1694d7c9ebb71b69d",
+      "installedAt": "2026-07-21T17:19:26.574Z",
+      "updatedAt": "2026-07-21T17:19:26.574Z"
+    },
+    "find-animation-opportunities": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/emilkowalski/skills.git",
+      "skillPath": "skills/find-animation-opportunities/SKILL.md",
+      "skillFolderHash": "502f891c05c9cade7e7bd815e3f228fdd20b61b6",
+      "installedAt": "2026-07-21T17:19:26.575Z",
+      "updatedAt": "2026-07-21T17:19:26.575Z"
+    },
+    "improve-animations": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/emilkowalski/skills.git",
+      "skillPath": "skills/improve-animations/SKILL.md",
+      "skillFolderHash": "2ff93ddb9833df45f5e83080de838bb668530820",
+      "installedAt": "2026-07-21T17:19:26.575Z",
+      "updatedAt": "2026-07-21T17:19:26.575Z"
+    },
+    "review-animations": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/emilkowalski/skills.git",
+      "skillPath": "skills/review-animations/SKILL.md",
+      "skillFolderHash": "82571acae75a97764fa7899f10bd21d93a4f1414",
+      "installedAt": "2026-07-21T17:19:26.576Z",
+      "updatedAt": "2026-07-21T17:19:26.576Z"
+    },
+    "baseline-ui": {
+      "source": "ibelick/ui-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/ibelick/ui-skills.git",
+      "skillPath": "skills/baseline-ui/SKILL.md",
+      "skillFolderHash": "e7c069cfe930e7a5fe4d6fe3314d5daefd5b7ebb",
+      "installedAt": "2026-07-21T17:19:29.930Z",
+      "updatedAt": "2026-07-21T17:19:29.930Z"
+    },
+    "create-design-md": {
+      "source": "ibelick/ui-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/ibelick/ui-skills.git",
+      "skillPath": "skills/create-design-md/SKILL.md",
+      "skillFolderHash": "de05c748f722fc3aa4447f12a2b24e5375c4fdfb",
+      "installedAt": "2026-07-21T17:19:29.933Z",
+      "updatedAt": "2026-07-21T17:19:29.933Z"
+    },
+    "fixing-accessibility": {
+      "source": "ibelick/ui-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/ibelick/ui-skills.git",
+      "skillPath": "skills/fixing-accessibility/SKILL.md",
+      "skillFolderHash": "e825388bce62e4456ed3b2b899c9bc58f5873c5b",
+      "installedAt": "2026-07-21T17:19:29.934Z",
+      "updatedAt": "2026-07-21T17:19:29.934Z"
+    },
+    "fixing-metadata": {
+      "source": "ibelick/ui-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/ibelick/ui-skills.git",
+      "skillPath": "skills/fixing-metadata/SKILL.md",
+      "skillFolderHash": "2906fa056416dff36892d1ff17c37de3090625b6",
+      "installedAt": "2026-07-21T17:19:29.935Z",
+      "updatedAt": "2026-07-21T17:19:29.935Z"
+    },
+    "fixing-motion-performance": {
+      "source": "ibelick/ui-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/ibelick/ui-skills.git",
+      "skillPath": "skills/fixing-motion-performance/SKILL.md",
+      "skillFolderHash": "76e5757bd2eb8ff38ff667eca9b665cbd707a386",
+      "installedAt": "2026-07-21T17:19:29.936Z",
+      "updatedAt": "2026-07-21T17:19:29.936Z"
+    },
+    "improve-ui": {
+      "source": "ibelick/ui-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/ibelick/ui-skills.git",
+      "skillPath": "skills/improve-ui/SKILL.md",
+      "skillFolderHash": "dfe1caace864e8a5db1719c4440633cd7f2f7e83",
+      "installedAt": "2026-07-21T17:19:29.936Z",
+      "updatedAt": "2026-07-21T17:19:29.936Z"
+    },
+    "improve-codebase-architecture": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/mattpocock/skills.git",
+      "skillPath": "skills/engineering/improve-codebase-architecture/SKILL.md",
+      "skillFolderHash": "bce229692e60dff3462e49bc5e774e83bef348e6",
+      "pluginName": "mattpocock-skills",
+      "installedAt": "2026-07-22T09:54:15.699Z",
+      "updatedAt": "2026-07-22T09:54:15.699Z"
+    },
+    "architecture-patterns": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/wshobson/agents.git",
+      "skillPath": "plugins/backend-development/skills/architecture-patterns/SKILL.md",
+      "skillFolderHash": "55717d572be0446247e43e1532542428d00093c8",
+      "installedAt": "2026-07-22T09:54:20.108Z",
+      "updatedAt": "2026-07-22T09:54:20.108Z"
+    },
+    "architecture-decision-records": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/wshobson/agents.git",
+      "skillPath": "plugins/documentation-generation/skills/architecture-decision-records/SKILL.md",
+      "skillFolderHash": "75227f18c39b855d72a328e3c4b5abc74144a4aa",
+      "installedAt": "2026-07-22T09:54:24.501Z",
+      "updatedAt": "2026-07-22T09:54:24.501Z"
+    },
+    "api-design-principles": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/wshobson/agents.git",
+      "skillPath": "plugins/backend-development/skills/api-design-principles/SKILL.md",
+      "skillFolderHash": "c1e5a719781eba052f8b7bf17046f6c43bbc6dab",
+      "installedAt": "2026-07-22T09:54:29.201Z",
+      "updatedAt": "2026-07-22T09:54:29.201Z"
+    },
+    "nodejs-backend-patterns": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/wshobson/agents.git",
+      "skillPath": "plugins/javascript-typescript/skills/nodejs-backend-patterns/SKILL.md",
+      "skillFolderHash": "81ed3d818cdcfc8ecc31751343ffe344c30a2c3b",
+      "installedAt": "2026-07-22T09:54:33.535Z",
+      "updatedAt": "2026-07-22T09:54:33.535Z"
+    },
+    "backend-patterns": {
+      "source": "affaan-m/everything-claude-code",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/affaan-m/everything-claude-code.git",
+      "skillPath": "skills/backend-patterns/SKILL.md",
+      "skillFolderHash": "94ae4c73f55ace2b800fdda614d90a88e7469b1d",
+      "installedAt": "2026-07-22T09:55:06.154Z",
+      "updatedAt": "2026-07-22T09:55:06.154Z"
+    },
+    "database-migration": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/wshobson/agents.git",
+      "skillPath": "plugins/framework-migration/skills/database-migration/SKILL.md",
+      "skillFolderHash": "80a176973c42ea85e1aaca325c3a713ad8569a82",
+      "installedAt": "2026-07-22T09:55:11.916Z",
+      "updatedAt": "2026-07-22T09:55:11.916Z"
+    },
+    "neon-postgres": {
+      "source": "neondatabase/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/neondatabase/agent-skills.git",
+      "skillPath": "skills/neon-postgres/SKILL.md",
+      "skillFolderHash": "2406cadf9ccbf743f8b487146217041af2105c7a",
+      "installedAt": "2026-07-22T09:55:15.143Z",
+      "updatedAt": "2026-07-22T09:55:15.143Z"
+    },
+    "prisma-client-api": {
+      "source": "prisma/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/prisma/skills.git",
+      "skillPath": "prisma-client-api/SKILL.md",
+      "skillFolderHash": "cb6a31f762f6547c7e4e8a4e41e6fb0b55120c0e",
+      "installedAt": "2026-07-22T09:55:18.002Z",
+      "updatedAt": "2026-07-22T09:55:18.002Z"
+    },
+    "opentui": {
+      "source": "msmps/opentui-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/msmps/opentui-skill.git",
+      "skillPath": "skill/opentui/SKILL.md",
+      "skillFolderHash": "df792bbc99e5b8294f47629d250f3c6d31a8c341",
+      "installedAt": "2026-07-22T09:55:20.781Z",
+      "updatedAt": "2026-07-22T09:55:20.781Z"
+    },
+    "api-and-interface-design": {
+      "source": "addyosmani/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/addyosmani/agent-skills.git",
+      "skillPath": "skills/api-and-interface-design/SKILL.md",
+      "skillFolderHash": "79410f2b6928b5ecb760e34e4c58c68de71f7fd8",
+      "installedAt": "2026-07-22T09:55:24.531Z",
+      "updatedAt": "2026-07-22T09:55:24.531Z"
+    },
+    "rust-cli-builder": {
+      "source": "davila7/claude-code-templates",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/davila7/claude-code-templates.git",
+      "skillPath": "cli-tool/components/skills/development/rust-cli-builder/SKILL.md",
+      "skillFolderHash": "e457d48dab10fca708293a591c880f51b2736c57",
+      "installedAt": "2026-07-22T09:56:29.021Z",
+      "updatedAt": "2026-07-22T09:56:29.021Z"
+    },
+    "microservices-patterns": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/wshobson/agents.git",
+      "skillPath": "plugins/backend-development/skills/microservices-patterns/SKILL.md",
+      "skillFolderHash": "740eeacdc402a2fff9df5c0b5bf85c50ab192251",
+      "installedAt": "2026-07-22T09:57:11.571Z",
+      "updatedAt": "2026-07-22T09:57:11.571Z"
+    },
+    "cqrs-implementation": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/wshobson/agents.git",
+      "skillPath": "plugins/backend-development/skills/cqrs-implementation/SKILL.md",
+      "skillFolderHash": "52755a7cd84c17eede0edcda564695bd2dbf4fc9",
+      "installedAt": "2026-07-22T09:57:15.128Z",
+      "updatedAt": "2026-07-22T09:57:15.128Z"
+    },
+    "distributed-tracing": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/wshobson/agents.git",
+      "skillPath": "plugins/observability-monitoring/skills/distributed-tracing/SKILL.md",
+      "skillFolderHash": "48a42fa7296742550bcdf14827d84bf96da98075",
+      "installedAt": "2026-07-22T09:57:20.079Z",
+      "updatedAt": "2026-07-22T09:57:20.079Z"
+    },
+    "event-store-design": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/wshobson/agents.git",
+      "skillPath": "plugins/backend-development/skills/event-store-design/SKILL.md",
+      "skillFolderHash": "6997a7064b206d63458529b1fd130c221bd7f671",
+      "installedAt": "2026-07-22T09:57:28.581Z",
+      "updatedAt": "2026-07-22T09:57:28.581Z"
+    },
+    "mobile-android-design": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/wshobson/agents.git",
+      "skillPath": "plugins/ui-design/skills/mobile-android-design/SKILL.md",
+      "skillFolderHash": "81dd2f7f2196d74f4937aeb649fc536398601c01",
+      "installedAt": "2026-07-23T12:31:32.224Z",
+      "updatedAt": "2026-07-23T12:31:32.224Z"
+    },
+    "android-cli": {
+      "source": "android/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/android/skills.git",
+      "skillPath": "devtools/android-cli/SKILL.md",
+      "skillFolderHash": "3f9c1bd7a953d14aa9cbafc4ffd9cba6373bcce8",
+      "installedAt": "2026-07-23T12:31:45.121Z",
+      "updatedAt": "2026-07-23T12:31:45.121Z"
+    },
+    "adaptive": {
+      "source": "android/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/android/skills.git",
+      "skillPath": "jetpack-compose/adaptive/SKILL.md",
+      "skillFolderHash": "bc699bc2c38466505ef5673a11223b7b1b94df3b",
+      "installedAt": "2026-07-23T12:31:47.953Z",
+      "updatedAt": "2026-07-23T12:31:47.953Z"
+    },
+    "navigation-3": {
+      "source": "android/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/android/skills.git",
+      "skillPath": "navigation/navigation-3/SKILL.md",
+      "skillFolderHash": "50bc1a1342d136563247217ab9e65692a00ed800",
+      "installedAt": "2026-07-23T12:31:51.238Z",
+      "updatedAt": "2026-07-23T12:31:51.238Z"
+    },
+    "migrate-xml-views-to-jetpack-compose": {
+      "source": "android/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/android/skills.git",
+      "skillPath": "jetpack-compose/migration/migrate-xml-views-to-jetpack-compose/SKILL.md",
+      "skillFolderHash": "98bef2ddff9737b763fd38138fef58d772cd3e24",
+      "installedAt": "2026-07-23T12:31:54.029Z",
+      "updatedAt": "2026-07-23T12:31:54.029Z"
+    },
+    "styles": {
+      "source": "android/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/android/skills.git",
+      "skillPath": "jetpack-compose/theming/styles/SKILL.md",
+      "skillFolderHash": "d5ff1181ecd625168c41d9e8bcbf48fcff77ee63",
+      "installedAt": "2026-07-23T12:31:57.841Z",
+      "updatedAt": "2026-07-23T12:31:57.841Z"
+    },
+    "camerax": {
+      "source": "android/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/android/skills.git",
+      "skillPath": "camera/camerax/SKILL.md",
+      "skillFolderHash": "72dd1e466ac50d19af15a0caf5c27ded8adf2d60",
+      "installedAt": "2026-07-23T12:32:02.323Z",
+      "updatedAt": "2026-07-23T12:32:02.323Z"
+    },
+    "appfunctions": {
+      "source": "android/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/android/skills.git",
+      "skillPath": "device-ai/appfunctions/SKILL.md",
+      "skillFolderHash": "4fc835d10c717a70b1341e4a0871f754b5b38b07",
+      "installedAt": "2026-07-23T12:32:05.560Z",
+      "updatedAt": "2026-07-23T12:32:05.560Z"
+    },
+    "r8-analyzer": {
+      "source": "android/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/android/skills.git",
+      "skillPath": "performance/r8-analyzer/SKILL.md",
+      "skillFolderHash": "ad2bba529a31488ea41ecc52372a5b86e0eff99f",
+      "installedAt": "2026-07-23T12:32:10.132Z",
+      "updatedAt": "2026-07-23T12:32:10.132Z"
+    },
+    "android-intent-security": {
+      "source": "android/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/android/skills.git",
+      "skillPath": "security/android-intent-security/SKILL.md",
+      "skillFolderHash": "2a4bc5aa9de0a055915158eb7227d30359da790d",
+      "installedAt": "2026-07-23T12:32:13.982Z",
+      "updatedAt": "2026-07-23T12:32:13.982Z"
+    },
+    "play-billing-library-version-upgrade": {
+      "source": "android/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/android/skills.git",
+      "skillPath": "play/play-billing-library-version-upgrade/SKILL.md",
+      "skillFolderHash": "6fe64c395563e7c922abf087315aa34b683058d3",
+      "installedAt": "2026-07-23T12:32:18.105Z",
+      "updatedAt": "2026-07-23T12:32:18.105Z"
+    },
+    "play-policy-insights": {
+      "source": "android/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/android/skills.git",
+      "skillPath": "play/play-policy-insights/SKILL.md",
+      "skillFolderHash": "fcc73c77619b17137b78cead4b651ec444dca978",
+      "installedAt": "2026-07-23T12:32:22.672Z",
+      "updatedAt": "2026-07-23T12:32:22.672Z"
+    },
+    "verified-email": {
+      "source": "android/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/android/skills.git",
+      "skillPath": "identity/verified-email/SKILL.md",
+      "skillFolderHash": "b3f492ff2f7eb92cebe767895e8f98726255b8bc",
+      "installedAt": "2026-07-23T12:32:25.811Z",
+      "updatedAt": "2026-07-23T12:32:25.811Z"
+    },
+    "android-clean-architecture": {
+      "source": "affaan-m/everything-claude-code",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/affaan-m/everything-claude-code.git",
+      "skillPath": "skills/android-clean-architecture/SKILL.md",
+      "skillFolderHash": "cd77287f53bf7d92c7be18f00978608204d23ca4",
+      "installedAt": "2026-07-23T12:32:51.519Z",
+      "updatedAt": "2026-07-23T12:32:51.519Z"
+    },
+    "kotlin-coroutines-flows": {
+      "source": "affaan-m/everything-claude-code",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/affaan-m/everything-claude-code.git",
+      "skillPath": "skills/kotlin-coroutines-flows/SKILL.md",
+      "skillFolderHash": "4408203e7a5b1d62f679f7300187f4a617222598",
+      "installedAt": "2026-07-23T12:33:01.220Z",
+      "updatedAt": "2026-07-23T12:33:01.220Z"
+    },
+    "kotlin-patterns": {
+      "source": "affaan-m/everything-claude-code",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/affaan-m/everything-claude-code.git",
+      "skillPath": "skills/kotlin-patterns/SKILL.md",
+      "skillFolderHash": "af29aff10fb394d44dbcf1af1e97fc8b37cc6227",
+      "installedAt": "2026-07-23T12:33:17.527Z",
+      "updatedAt": "2026-07-23T12:33:17.527Z"
+    },
+    "compose-multiplatform-patterns": {
+      "source": "affaan-m/everything-claude-code",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/affaan-m/everything-claude-code.git",
+      "skillPath": "skills/compose-multiplatform-patterns/SKILL.md",
+      "skillFolderHash": "296fd3181c6135abc0ebf99b801d4d76a82ac485",
+      "installedAt": "2026-07-23T12:33:35.375Z",
+      "updatedAt": "2026-07-23T12:33:35.375Z"
+    },
+    "kotlin-testing": {
+      "source": "affaan-m/everything-claude-code",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/affaan-m/everything-claude-code.git",
+      "skillPath": "skills/kotlin-testing/SKILL.md",
+      "skillFolderHash": "47c56b9fbe8adfeeaf4961ce9eb761bbb614d1e1",
+      "installedAt": "2026-07-23T12:33:47.053Z",
+      "updatedAt": "2026-07-23T12:33:47.053Z"
+    },
+    "android-jetpack-compose": {
+      "source": "thebushidocollective/han",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/thebushidocollective/han.git",
+      "skillPath": "plugins/specialized/android/skills/jetpack-compose/SKILL.md",
+      "skillFolderHash": "45811b8c857bdb6562eff2927580f16088cdfdc1",
+      "installedAt": "2026-07-23T12:33:53.064Z",
+      "updatedAt": "2026-07-23T12:33:53.064Z"
+    },
+    "android-native-dev": {
+      "source": "minimax-ai/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/minimax-ai/skills.git",
+      "skillPath": "skills/android-native-dev/SKILL.md",
+      "skillFolderHash": "cdaadb554c6d5e7d65f35f5052e81c3d839ebdd2",
+      "installedAt": "2026-07-23T12:33:58.651Z",
+      "updatedAt": "2026-07-23T12:33:58.651Z"
+    },
+    "android-kotlin": {
+      "source": "alinaqi/claude-bootstrap",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alinaqi/claude-bootstrap.git",
+      "skillPath": "skills/android-kotlin/SKILL.md",
+      "skillFolderHash": "3b1fc7a4be5d9f486e3b23b93cd2995094a8d959",
+      "installedAt": "2026-07-23T12:34:03.206Z",
+      "updatedAt": "2026-07-23T12:34:03.206Z"
+    },
+    "argent-android-emulator-setup": {
+      "source": "software-mansion/argent",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/software-mansion/argent.git",
+      "skillPath": "packages/skills/skills/argent-android-emulator-setup/SKILL.md",
+      "skillFolderHash": "91a0c90882608841eaf46dff9a9ddc7eae33c081",
+      "installedAt": "2026-07-23T12:34:16.521Z",
+      "updatedAt": "2026-07-23T12:34:16.521Z"
+    }
+  },
+  "dismissed": {
+    "findSkillsPrompt": true
+  }
+}

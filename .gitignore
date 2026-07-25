@@ -52,6 +52,11 @@ pi/.pi/agent/workflows/
 pi/.pi/agent/bin/
 pi/.pi/agent/node_modules/
 pi/.pi/agent/npm/
+# skill package installs (any depth under pi skills)
+pi/.pi/agent/skills/**/node_modules/
+
+# agents skills — never commit runtime junk
+agents/.agents/skills/**/node_modules/
 
 # Zed temp files
 zed/.config/zed/.tmp*
