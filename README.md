@@ -11,6 +11,26 @@ cd ~/.dotfiles && ./install.sh
 
 Safe to re-run: `~/.dotfiles/install.sh`
 
+## Update installed packages
+
+Run the global updater to refresh Homebrew formulae/casks, language runtimes,
+global CLI packages, Mac App Store apps (when `mas` is installed), and
+VS Code/Cursor extensions:
+
+```bash
+cd ~/.dotfiles
+./update.sh
+```
+
+Preview the detected update tasks without changing anything:
+
+```bash
+./update.sh --dry-run
+```
+
+Project-local dependencies are intentionally not included. Update those inside
+each project so dependency changes, lockfiles, and tests stay together.
+
 ## Layout
 
 | Package | Purpose |
@@ -32,6 +52,7 @@ Safe to re-run: `~/.dotfiles/install.sh`
 | `agents/` | Shared agent skills (`~/.agents/skills`) used by pi, Claude, Codex, Grok, … |
 | `Brewfile` | All Homebrew packages/casks |
 | `install.sh` | Bootstrap: brew, stow, services |
+| `update.sh` | Update global packages, runtimes, apps, and editor extensions |
 
 Neovim keybindings: see [`nvim/.config/nvim/README.md`](nvim/.config/nvim/README.md).
 
