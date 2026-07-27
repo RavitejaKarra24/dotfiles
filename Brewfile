@@ -39,13 +39,14 @@ brew "pipx"
 brew "rbenv"                      # Ruby version manager
 brew "ripgrep"                    # Better grep
 brew "ruby"
+brew "shellcheck"                 # Shell static analysis
+brew "shfmt"                      # Shell formatter
 brew "stow"                       # Symlink manager (for this dotfiles repo)
+brew "stylua"                     # Lua formatter
 brew "tmux"                       # Terminal multiplexer
 brew "tree"
 brew "yazi"                       # File manager TUI
 brew "zoxide"                     # Better cd
-brew "zsh-autosuggestions"
-brew "zsh-syntax-highlighting"
 
 # ============================================================================
 # CLI Tools - Nice to Have
@@ -53,6 +54,7 @@ brew "zsh-syntax-highlighting"
 brew "atuin"                      # Shell history
 brew "cmatrix"                    # Matrix screensaver
 brew "ffmpeg"
+brew "exiftool"                   # Yazi metadata opener
 brew "figlet"                     # ASCII art text
 brew "gmp"
 brew "httpie"                     # Better curl
@@ -61,6 +63,7 @@ brew "kind"                       # Kubernetes in Docker
 brew "lazygit"                    # Git TUI
 brew "maven"
 brew "mpv"                        # Media player
+brew "mediainfo"                  # Yazi media metadata
 brew "mysql"
 brew "fastfetch"                  # System info
 brew "git-delta"                  # Better git diffs
@@ -71,17 +74,20 @@ brew "pkgconf"
 brew "poppler"
 brew "python-tk@3.12"
 brew "redis"
+brew "ruff"                       # Python linting and formatting
 brew "sevenzip"
 brew "speedtest-cli"
 brew "spotify_player"             # Spotify TUI
 brew "sqlx-cli"
 brew "switchaudio-osx"            # Audio output switcher
 brew "tesseract"                  # OCR
+brew "terminal-notifier"          # Pomodoro desktop notifications
 brew "tlrc"                       # TLDR pages
 brew "yarn", link: false
 brew "libyaml"
 brew "icu4c@76"
 brew "gemini-cli"
+brew "gitleaks"                   # Secret scanning
 
 # ============================================================================
 # Third-party CLI Tools

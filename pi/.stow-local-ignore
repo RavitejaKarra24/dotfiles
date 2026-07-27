@@ -1,0 +1,5 @@
+node_modules
+(^|/)(npm|sessions|workflows|bin)(/|$)
+(^|/)\.env$
+(^|/)(auth|trust|models-store)\.json$
+.*\.(log|tmp|bak|swp|swo)$

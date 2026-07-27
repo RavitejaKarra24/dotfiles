@@ -32,6 +32,14 @@
 
 [diff]
 	colorMoved = default
+	algorithm = histogram
+
+[fetch]
+	prune = true
+	pruneTags = true
+
+[rerere]
+	enabled = true
 
 [alias]
 	st = status -sb
@@ -44,7 +52,7 @@
 	amend = commit --amend --no-edit
 [credential "https://github.com"]
 	helper = 
-	helper = !/opt/homebrew/bin/gh auth git-credential
+	helper = !gh auth git-credential
 [credential "https://gist.github.com"]
 	helper = 
-	helper = !/opt/homebrew/bin/gh auth git-credential
+	helper = !gh auth git-credential

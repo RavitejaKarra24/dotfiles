@@ -9,7 +9,15 @@ git clone git@github.com:RavitejaKarra24/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles && ./install.sh
 ```
 
-Safe to re-run: `~/.dotfiles/install.sh`
+Without an SSH key, use:
+
+```bash
+git clone https://github.com/RavitejaKarra24/dotfiles.git ~/.dotfiles
+```
+
+Preview first with `./install.sh --dry-run`. The installer is safe to re-run,
+backs up real conflicts with a manifest, and refuses to replace unrelated
+symlinks. Use `--non-interactive` to skip opt-in macOS preferences.
 
 ## Update installed packages
 
@@ -51,8 +59,10 @@ each project so dependency changes, lockfiles, and tests stay together.
 | `codex/` | Codex config (`~/.codex`) — settings, instructions, keybindings, rules, skill router |
 | `agents/` | Shared agent skills (`~/.agents/skills`) used by pi, Claude, Codex, Grok, … |
 | `Brewfile` | All Homebrew packages/casks |
-| `install.sh` | Bootstrap: brew, stow, services |
+| `install.sh` | Safe bootstrap: preflight, Brew, Stow, dependencies |
 | `update.sh` | Update global packages, runtimes, apps, and editor extensions |
+| `doctor.sh` | Repository-wide config, Stow, security, and Pi validation |
+| `uninstall.sh` / `restore.sh` | Remove managed links and restore conflict backups |
 
 Neovim keybindings: see [`nvim/.config/nvim/README.md`](nvim/.config/nvim/README.md).
 
@@ -68,7 +78,8 @@ Neovim keybindings: see [`nvim/.config/nvim/README.md`](nvim/.config/nvim/README
 - **Alt + Shift + …** → move window to workspace
 - SketchyBar starts with AeroSpace; workspace changes trigger bar updates
 
-Installer stows `aerospace` and starts sketchybar (AeroSpace uses start-at-login).
+Installer stows `aerospace`; AeroSpace is the single owner of SketchyBar
+startup.
 
 ## Packages (Brewfile highlights)
 
@@ -105,7 +116,7 @@ Installer stows `aerospace` and starts sketchybar (AeroSpace uses start-at-login
 | gitsigns | Hunk nav/stage/reset/blame (`]h` `[h` `<leader>h*`) |
 | lazygit.nvim | `<leader>gg` / `gf` / `gl` |
 | which-key | Leader group hints |
-| Conform | rustfmt, gofmt, ruff/black, stylua; `<leader>f` prefers Conform |
+| Conform | rustfmt, gofmt, ruff, stylua; `<leader>f` prefers Conform |
 | Treesitter | More langs + indent; playground removed |
 | Format | `<leader>f` → Conform with LSP fallback |
 
@@ -121,7 +132,7 @@ Full map: [`nvim/.config/nvim/README.md`](nvim/.config/nvim/README.md).
 
 Stow package `pi/` → `~/.pi/agent` (extensions, theme, settings, package deps).
 
-- Installer runs `npm install -g @earendil-works/pi-coding-agent` if needed, then `npm install` in `~/.pi/agent`
+- Installer runs `npm install -g @earendil-works/pi-coding-agent` if needed, then `npm ci` in the unified workspace
 - Theme: `github-dark-default`; package `npm:pi-spark` with its dark theme filtered to avoid collisions
 - Secrets stay local: `auth.json`, `.env`, `sessions/`, `models-store.json` (not in git)
 - Optional Firecrawl: `FIRECRAWL_API_KEY` in `~/.pi/agent/.env`
@@ -136,15 +147,14 @@ Because the live files are Stow symlinks, edits made through `~/.codex/config.to
 
 Details: [`codex/README.md`](codex/README.md).
 
-## Changelog (since last commit)
+## Validation
 
-Working-tree changes documented in this README and the nvim README:
+Run the complete local audit before committing:
 
-1. **WM migration** — delete yabai/skhd configs; add AeroSpace; update `install.sh` + Brewfile
-2. **Git ergonomics** — delta, aliases, keychain, lazygit theme/commands
-3. **Neovim plugins** — oil, gitsigns, lazygit, which-key; onedark default; broader formatters/parsers
-4. **Shell polish** — lazy NVM, aliases, cleaner PATH/history
-5. **Theme alignment** — Ghostty deep_ocean; lazygit colors match
-6. **Brewfile** — fastfetch, git-delta, ctop; drop yabai/skhd/neofetch
-7. **Karabiner** — Caps → Meh + Escape alone
-8. **Codex** — add portable Stow-managed config without auth or runtime state
+```bash
+./doctor.sh
+```
+
+Use `./doctor.sh --quick` for config syntax, application-aware Yazi validation,
+and a disposable Stow plan without the Pi test suite. CI runs portable checks
+on Linux and application-aware configuration checks on macOS.

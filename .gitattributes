@@ -1,0 +1,14 @@
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+
+**/package-lock.json linguist-generated=true
+agents/.agents/skills/** linguist-vendored=true
+pi/.pi/agent/skills/** linguist-vendored=true
+codex/.codex/skills/** linguist-vendored=true
+ghostty/.config/ghostty/shaders/** linguist-vendored=true
+yazi/.config/yazi/flavors/** linguist-vendored=true

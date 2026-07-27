@@ -1,45 +1,42 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-PREV_FILE="/tmp/sketchybar_net_prev"
+set -u
+umask 077
 
-# Get current bytes received on the primary interface
-INTERFACE=$(route -n get default 2>/dev/null | grep interface | awk '{print $2}')
-if [ -z "$INTERFACE" ]; then
+PREV_FILE="${TMPDIR:-/tmp}/sketchybar_net_prev_${UID}"
+NOW=$(date +%s)
+
+INTERFACE=$(route -n get default 2>/dev/null | awk '/interface:/{print $2; exit}')
+if [[ -z "$INTERFACE" ]]; then
   sketchybar --set "$NAME" label="--"
   exit 0
 fi
 
-CURRENT_BYTES=$(netstat -I "$INTERFACE" -b 2>/dev/null | tail -1 | awk '{print $7}')
-
-if [ -z "$CURRENT_BYTES" ]; then
+CURRENT_BYTES=$(netstat -I "$INTERFACE" -b 2>/dev/null | awk 'NR > 1 {value=$7} END {print value}')
+if [[ ! "$CURRENT_BYTES" =~ ^[0-9]+$ ]]; then
   sketchybar --set "$NAME" label="--"
   exit 0
 fi
 
-if [ -f "$PREV_FILE" ]; then
-  PREV_BYTES=$(cat "$PREV_FILE")
-  DIFF=$((CURRENT_BYTES - PREV_BYTES))
-
-  # update_freq is 2 seconds, so divide by 2 for per-second rate
-  RATE=$((DIFF / 2))
-
-  if [ "$RATE" -lt 0 ]; then
-    RATE=0
+DISPLAY="0 B/s"
+if [[ -r "$PREV_FILE" ]]; then
+  read -r PREV_TIME PREV_BYTES PREV_INTERFACE < "$PREV_FILE"
+  if [[ "$PREV_TIME" =~ ^[0-9]+$ && "$PREV_BYTES" =~ ^[0-9]+$ && "$PREV_INTERFACE" == "$INTERFACE" ]]; then
+    ELAPSED=$((NOW - PREV_TIME))
+    DIFF=$((CURRENT_BYTES - PREV_BYTES))
+    if (( ELAPSED > 0 && DIFF >= 0 )); then
+      RATE=$((DIFF / ELAPSED))
+      DISPLAY=$(awk -v rate="$RATE" 'BEGIN {
+        if (rate >= 1073741824) printf "%.1f GB/s", rate / 1073741824
+        else if (rate >= 1048576) printf "%.1f MB/s", rate / 1048576
+        else if (rate >= 1024) printf "%.1f KB/s", rate / 1024
+        else printf "%d B/s", rate
+      }')
+    fi
   fi
-
-  if [ "$RATE" -gt 1073741824 ]; then
-    DISPLAY=$(echo "scale=1; $RATE / 1073741824" | bc)" GB/s"
-  elif [ "$RATE" -gt 1048576 ]; then
-    DISPLAY=$(echo "scale=1; $RATE / 1048576" | bc)" MB/s"
-  elif [ "$RATE" -gt 1024 ]; then
-    DISPLAY=$(echo "scale=1; $RATE / 1024" | bc)" KB/s"
-  else
-    DISPLAY="${RATE} B/s"
-  fi
-
-  sketchybar --set "$NAME" label="$DISPLAY"
-else
-  sketchybar --set "$NAME" label="0 B/s"
 fi
 
-echo "$CURRENT_BYTES" > "$PREV_FILE"
+sketchybar --set "$NAME" label="$DISPLAY"
+TEMP_FILE="${PREV_FILE}.$$"
+printf '%s %s %s\n' "$NOW" "$CURRENT_BYTES" "$INTERFACE" > "$TEMP_FILE"
+mv -f "$TEMP_FILE" "$PREV_FILE"

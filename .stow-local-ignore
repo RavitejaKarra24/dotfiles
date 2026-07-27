@@ -1,0 +1,32 @@
+# Common GNU Stow ignore policy. Stow reads local ignore files per package;
+# install.sh and doctor.sh also pass the critical rules explicitly.
+\.git
+\.gitignore
+\.stow-local-ignore
+\.DS_Store
+\.AppleDouble
+\.LSOverride
+
+# Dependencies and package-manager state
+node_modules
+(^|/)(npm|\.npm|\.pnpm-store|\.yarn|vendor)(/|$)
+
+# Secrets, credentials, and local environment
+(^|/)\.env(/|$)
+(^|/)\.env\..+$
+(^|/)(auth|trust|models-store)\.json$
+(^|/)\.zshrc\.secrets$
+
+# Application runtime state
+(^|/)(cache|caches|sessions|workflows|conversations|embeddings)(/|$)
+(^|/)(history|history\.db|history\.db-.+|server_id)$
+(^|/)(automatic_backups|completions|plugin)(/|$)
+(^|/)(bin|tmp|temp)(/|$)
+.*\.(log|tmp|bak|swp|swo)$
+
+# Generated and machine-specific files
+(^|/)nvim\.log$
+(^|/)\.luarc\.json$
+(^|/)fish_variables$
+(^|/)fish_history$
+(^|/)\.spotify_token_cache.*$

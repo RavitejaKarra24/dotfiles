@@ -61,7 +61,7 @@ These work when an LSP is attached (Rust, TS, Lua).
 - `<leader>f` -> Conform format (LSP fallback if Conform unavailable)
 - `<leader>cf` -> Conform format
 
-Formatters: prettier (web/md), rustfmt, gofmt, ruff/black (Python), stylua (Lua).
+Formatters: prettier (web/md), rustfmt, gofmt, ruff (Python), stylua (Lua).
 
 ## Quickfix and Location List
 

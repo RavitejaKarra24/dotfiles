@@ -1,0 +1,45 @@
+name: Validate dotfiles
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  portable:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: pi/.pi/agent/package-lock.json
+      - name: Install validation tools
+        run: sudo apt-get update && sudo apt-get install -y jq lua5.4 shellcheck shfmt stow zsh
+      - name: Install locked Pi workspace
+        working-directory: pi/.pi/agent
+        run: npm ci --ignore-scripts --no-audit && npm run prepare
+      - name: Validate configuration
+        run: ./doctor.sh --ci --quick
+      - name: Validate Pi
+        working-directory: pi/.pi/agent
+        run: npm run check && npm run format:check && npm run test:unit
+      - name: Audit Pi dependencies
+        working-directory: pi/.pi/agent
+        run: npm audit --audit-level=high
+      - name: Scan for secrets
+        uses: gitleaks/gitleaks-action@v2
+
+  macos:
+    runs-on: macos-15
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install macOS config validators
+        run: brew install jq lua shellcheck shfmt stow yazi
+      - name: Validate macOS-specific configuration
+        run: ./doctor.sh --ci --quick

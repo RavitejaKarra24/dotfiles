@@ -34,6 +34,9 @@ function deadline<A>(operation: Promise<A>, timeoutMs: number) {
 }
 
 async function codexAvailable() {
+  if (process.env.PI_LIVE_INTEGRATION !== "1") {
+    return false;
+  }
   return Effect.runPromise(codexBackend.available);
 }
 

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+for command_name in tmux ghq fzf; do
+    command -v "$command_name" >/dev/null 2>&1 || {
+        echo "tmux-sessionizer requires: $command_name" >&2
+        exit 1
+    }
+done
+
+selected="$(ghq list -p | fzf --prompt='tmux project> ' --height=60% --reverse)" || exit 0
+[[ -n "$selected" ]] || exit 0
+
+session_name="$(basename "$selected" | tr '.:' '__' | tr -cd '[:alnum:]_-')"
+[[ -n "$session_name" ]] || {
+    echo "Could not derive a tmux session name from: $selected" >&2
+    exit 1
+}
+
+if ! tmux has-session -t "=$session_name" 2>/dev/null; then
+    tmux new-session -d -s "$session_name" -c "$selected"
+fi
+
+if [[ -n "${TMUX:-}" ]]; then
+    tmux switch-client -t "=$session_name"
+else
+    tmux attach-session -t "=$session_name"
+fi

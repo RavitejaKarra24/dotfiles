@@ -25,7 +25,9 @@ karabiner/.config/karabiner/automatic_backups/
 # Neovim generated/cache files
 nvim/.config/nvim/plugin/
 nvim/.config/nvim/.luarc.json
-nvim/.config/nvim/lazy-lock.json
+nvim/.config/nvim/nvim.log
+nvim.log
+*.log
 
 # Fish history and generated completions
 fish/.config/fish/fish_history
@@ -76,3 +78,6 @@ zed/.config/zed/.tmp*
 
 # Yazi temp/backup files
 yazi/.config/yazi/*.toml-*
+
+# Locally compiled SketchyBar helper (source remains tracked)
+sketchybar/.config/sketchybar/helper/helper

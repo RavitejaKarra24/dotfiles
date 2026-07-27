@@ -2,10 +2,16 @@
 
 source "$CONFIG_DIR/colors.sh"
 
-CPU=$(ps -A -o %cpu | awk '{s+=$1} END {printf "%.0f", s}')
+CORES=$(sysctl -n hw.logicalcpu 2>/dev/null || echo 1)
+CPU=$(ps -A -o %cpu | awk -v cores="$CORES" '
+  { total += $1 }
+  END {
+    if (cores < 1) cores = 1
+    printf "%.0f", total / cores
+  }
+')
 
-# Cap at 100 per core, but show total across all cores
-# For display, we'll show the aggregate
+# Normalize aggregate process CPU by the number of logical CPUs.
 if [ "$CPU" -ge 70 ]; then
   COLOR=$RED
 elif [ "$CPU" -ge 30 ]; then
@@ -16,4 +22,4 @@ else
   COLOR=$LABEL_COLOR
 fi
 
-sketchybar --set "$NAME" label="${CPU}%" label.color=$COLOR
+sketchybar --set "$NAME" label="${CPU}%" label.color="$COLOR"

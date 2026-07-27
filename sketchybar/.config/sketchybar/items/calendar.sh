@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Filename: ~/github/dotfiles-latest/sketchybar/felixkratz/items/calendar.sh
+# Calendar and clock.
 
 calendar=(
   icon=cal
@@ -16,7 +16,7 @@ calendar=(
   padding_left=15
   update_freq=30
   script="$PLUGIN_DIR/calendar.sh"
-  click_script="$PLUGIN_DIR/zen.sh"
+  click_script="open -a Calendar"
 )
 
 sketchybar --add item calendar right \

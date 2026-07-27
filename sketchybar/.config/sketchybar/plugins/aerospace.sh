@@ -10,16 +10,16 @@ WORKSPACE_ID="${NAME##*.}"
 
 if [ "$SENDER" = "aerospace_workspace_change" ]; then
   if [ "$WORKSPACE_ID" = "$FOCUSED_WORKSPACE" ]; then
-    sketchybar --set $NAME \
-      icon.color=$WHITE \
+    sketchybar --set "$NAME" \
+      icon.color="$WHITE" \
       icon.highlight=on \
-      background.color=$MAGENTA \
+      background.color="$MAGENTA" \
       background.drawing=on
   else
-    sketchybar --set $NAME \
-      icon.color=$GREY \
+    sketchybar --set "$NAME" \
+      icon.color="$GREY" \
       icon.highlight=off \
-      background.color=$TRANSPARENT \
+      background.color="$TRANSPARENT" \
       background.drawing=off
   fi
 fi

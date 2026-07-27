@@ -5,6 +5,7 @@
 # Usage:
 #   ./update.sh
 #   ./update.sh --dry-run
+#   ./update.sh --greedy
 #
 # This intentionally updates global tools only. Run the appropriate package
 # manager inside each project to update that project's lockfile/dependencies.
@@ -12,6 +13,8 @@
 set -uo pipefail
 
 DRY_RUN=0
+GREEDY_CASKS=0
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 SUCCEEDED=()
 FAILED=()
 SKIPPED=()
@@ -34,13 +37,14 @@ fi
 
 usage() {
     cat <<'EOF'
-Usage: ./update.sh [--dry-run] [--help]
+Usage: ./update.sh [--dry-run] [--greedy] [--help]
 
 Update detected system-wide package managers, runtimes, global CLI packages,
 Mac App Store apps, and editor extensions.
 
 Options:
   -n, --dry-run  Print the update tasks without changing anything
+      --greedy   Also update casks that normally auto-update themselves
   -h, --help     Show this help
 
 Project dependencies are deliberately excluded. Update those from each
@@ -48,20 +52,23 @@ project directory so its tests and lockfile can be reviewed together.
 EOF
 }
 
-while (( $# > 0 )); do
+while (($# > 0)); do
     case "$1" in
-        -n|--dry-run)
-            DRY_RUN=1
-            ;;
-        -h|--help)
-            usage
-            exit 0
-            ;;
-        *)
-            printf '%sUnknown option:%s %s\n\n' "$RED" "$RESET" "$1" >&2
-            usage >&2
-            exit 2
-            ;;
+    -n | --dry-run)
+        DRY_RUN=1
+        ;;
+    --greedy)
+        GREEDY_CASKS=1
+        ;;
+    -h | --help)
+        usage
+        exit 0
+        ;;
+    *)
+        printf '%sUnknown option:%s %s\n\n' "$RED" "$RESET" "$1" >&2
+        usage >&2
+        exit 2
+        ;;
     esac
     shift
 done
@@ -87,7 +94,7 @@ run_step() {
     printf '%s[RUN]%s %s\n' "$BLUE" "$RESET" "$label"
     print_command "$@"
 
-    if (( DRY_RUN )); then
+    if ((DRY_RUN)); then
         return 0
     fi
 
@@ -144,7 +151,7 @@ update_cargo_packages() {
         fi
     done < <(cargo install --list 2>/dev/null)
 
-    if (( ! found )); then
+    if ((!found)); then
         skip_step "Cargo-installed CLI packages" "none installed"
     fi
 }
@@ -177,11 +184,11 @@ update_go_binaries() {
         case "
 $seen
 " in
-            *"
+        *"
 $package
 "*)
-                continue
-                ;;
+            continue
+            ;;
         esac
 
         seen="${seen}${package}"$'\n'
@@ -189,7 +196,7 @@ $package
         run_step "Update Go package: $package" go install "${package}@latest"
     done
 
-    if (( ! found )); then
+    if ((!found)); then
         skip_step "Go-installed CLI packages" "none installed"
     fi
 }
@@ -248,16 +255,28 @@ show_versions() {
 }
 
 printf '%sDeveloper environment updater%s\n' "$BOLD" "$RESET"
-if (( DRY_RUN )); then
+if ((DRY_RUN)); then
     printf '%sDry run: no packages will be changed.%s\n' "$YELLOW" "$RESET"
+else
+    DOTFILES_UPDATE_LOG_DIR="$HOME/Library/Logs/dotfiles"
+    mkdir -p "$DOTFILES_UPDATE_LOG_DIR"
+    DOTFILES_UPDATE_LOG="$DOTFILES_UPDATE_LOG_DIR/update-$(date +%Y%m%d-%H%M%S).log"
+    exec > >(tee -a "$DOTFILES_UPDATE_LOG") 2>&1
+    printf 'Log: %s\n' "$DOTFILES_UPDATE_LOG"
+    section "Pre-update version snapshot"
+    show_versions
 fi
 
 section "Homebrew packages and applications"
 if has brew; then
     run_step "Refresh Homebrew metadata" brew update
     run_step "Upgrade Homebrew formulae" brew upgrade --formula --yes
-    run_step "Upgrade Homebrew casks (including auto-updating apps)" \
-        brew upgrade --cask --greedy --yes
+    if ((GREEDY_CASKS)); then
+        run_step "Upgrade Homebrew casks (including auto-updating apps)" \
+            brew upgrade --cask --greedy --yes
+    else
+        run_step "Upgrade Homebrew casks" brew upgrade --cask --yes
+    fi
 else
     skip_step "Homebrew formulae and casks" "brew not installed"
 fi
@@ -366,7 +385,7 @@ else
     skip_step "Cursor extensions" "cursor CLI not installed"
 fi
 
-if (( DRY_RUN )); then
+if ((DRY_RUN)); then
     printf '\n%sDry run complete.%s Run %s./update.sh%s to apply these updates.\n' \
         "$GREEN" "$RESET" "$BOLD" "$RESET"
     exit 0
@@ -374,12 +393,17 @@ fi
 
 show_versions
 
+if [[ -x "$SCRIPT_DIR/doctor.sh" ]]; then
+    section "Post-update health check"
+    run_step "Run the quick dotfiles doctor" "$SCRIPT_DIR/doctor.sh" --quick
+fi
+
 section "Summary"
 printf '%sSucceeded:%s %d\n' "$GREEN" "$RESET" "${#SUCCEEDED[@]}"
 printf '%sSkipped:%s   %d\n' "$YELLOW" "$RESET" "${#SKIPPED[@]}"
 printf '%sFailed:%s    %d\n' "$RED" "$RESET" "${#FAILED[@]}"
 
-if (( ${#FAILED[@]} > 0 )); then
+if ((${#FAILED[@]} > 0)); then
     printf '\n%sThe following update tasks failed:%s\n' "$RED" "$RESET" >&2
     for item in "${FAILED[@]}"; do
         printf '  - %s\n' "$item" >&2

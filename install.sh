@@ -11,10 +11,27 @@
 #     ~/.dotfiles/install.sh
 #
 
-set -e
+set -Eeuo pipefail
 
-DOTFILES_DIR="$HOME/.dotfiles"
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 BACKUP_DIR="$HOME/.dotfiles-backup/$(date +%Y%m%d_%H%M%S)"
+DRY_RUN=0
+NON_INTERACTIVE=0
+
+for arg in "$@"; do
+    case "$arg" in
+    --dry-run) DRY_RUN=1 ;;
+    --non-interactive) NON_INTERACTIVE=1 ;;
+    -h | --help)
+        echo "Usage: $0 [--dry-run] [--non-interactive]"
+        exit 0
+        ;;
+    *)
+        echo "Unknown argument: $arg" >&2
+        exit 2
+        ;;
+    esac
+done
 
 # Colors for output
 RED='\033[0;31m'
@@ -27,6 +44,68 @@ info() { echo -e "${BLUE}[INFO]${NC} $1"; }
 success() { echo -e "${GREEN}[OK]${NC} $1"; }
 warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 error() { echo -e "${RED}[ERROR]${NC} $1"; }
+trap 'error "Failed at line $LINENO: $BASH_COMMAND"' ERR
+
+PACKAGES=(
+    zsh bash git wezterm vim tmux nvim ghostty karabiner aerospace
+    sketchybar lazygit yazi btop fish atuin spotify-player calcure
+    zed agents codex pi
+)
+STOW_ARGS=(
+    --no-folding
+    '--ignore=(^|/)\.DS_Store$'
+    '--ignore=(^|/)node_modules($|/)'
+    '--ignore=(^|/)\.env$'
+    '--ignore=(^|/)(auth|trust|models-store)\.json$'
+    '--ignore=.*\.(log|tmp|bak|swp|swo)$'
+)
+
+preflight() {
+    if [[ "$(uname -s)" != "Darwin" ]]; then
+        error "This bootstrap currently supports macOS only."
+        return 1
+    fi
+    [[ -f "$DOTFILES_DIR/Brewfile" ]] || {
+        error "Brewfile not found under $DOTFILES_DIR"
+        return 1
+    }
+    ((DRY_RUN == 1)) || [[ -w "$HOME" ]] || {
+        error "Home directory is not writable: $HOME"
+        return 1
+    }
+    success "Preflight passed ($(uname -m), repository: $DOTFILES_DIR)"
+}
+
+show_dry_run() {
+    info "Dry run: no system or home-directory changes will be made"
+    if command -v brew >/dev/null 2>&1; then
+        if brew bundle check --file="$DOTFILES_DIR/Brewfile" >/dev/null 2>&1; then
+            success "Brewfile is already satisfied"
+        else
+            warn "Brewfile has missing/outdated packages, or Homebrew could not access its cache"
+        fi
+    else
+        warn "Homebrew is not installed"
+    fi
+
+    if ! command -v stow >/dev/null 2>&1; then
+        warn "GNU Stow is not installed; cannot simulate links"
+        return
+    fi
+
+    local target output planned
+    target="$(mktemp -d "${TMPDIR:-/tmp}/dotfiles-stow.XXXXXX")"
+    output="$(mktemp "${TMPDIR:-/tmp}/dotfiles-stow-output.XXXXXX")"
+    local package
+    for package in "${PACKAGES[@]}"; do
+        [[ -d "$DOTFILES_DIR/$package" ]] || continue
+        stow --simulate --verbose -d "$DOTFILES_DIR" -t "$target" "${STOW_ARGS[@]}" "$package" >>"$output" 2>&1
+    done
+    planned="$(rg -c '^(LINK|MKDIR):' "$output" 2>/dev/null || echo 0)"
+    success "Stow simulation is conflict-free ($planned planned links/directories)"
+    rm -rf -- "$target"
+    rm -f -- "$output"
+}
 
 # ============================================================================
 # 1. Xcode Command Line Tools
@@ -37,8 +116,8 @@ install_xcode_cli() {
     else
         info "Installing Xcode CLI tools..."
         xcode-select --install
-        echo "Press any key after Xcode CLI tools installation is complete..."
-        read -n 1
+        warn "Finish the Xcode Command Line Tools installer, then rerun this script."
+        return 1
     fi
 }
 
@@ -51,8 +130,16 @@ install_homebrew() {
     else
         info "Installing Homebrew..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        # Add brew to PATH for this session
-        eval "$(/opt/homebrew/bin/brew shellenv)"
+        local brew_bin
+        for brew_bin in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+            [[ -x "$brew_bin" ]] || continue
+            eval "$("$brew_bin" shellenv)"
+            break
+        done
+        command -v brew >/dev/null 2>&1 || {
+            error "Homebrew installed but could not be found in a standard prefix"
+            return 1
+        }
         success "Homebrew installed"
     fi
 }
@@ -149,6 +236,7 @@ install_rust() {
     else
         info "Installing Rust via rustup..."
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        # shellcheck source=/dev/null
         source "$HOME/.cargo/env"
         success "Rust installed"
     fi
@@ -183,64 +271,79 @@ install_bun() {
 # ============================================================================
 # 11. Backup existing configs & Stow symlinks
 # ============================================================================
+list_stow_files() {
+    local package_dir="$1"
+    find "$package_dir" \
+        \( -name .git -o -name node_modules \
+        -o -path '*/.pi/agent/sessions' \
+        -o -path '*/.pi/agent/workflows' \
+        -o -path '*/.pi/agent/bin' \) -prune \
+        -o -type f \
+        ! -name .DS_Store \
+        ! -name .env \
+        ! -name auth.json \
+        ! -name trust.json \
+        ! -name models-store.json \
+        ! -name '*.log' \
+        ! -name '*.tmp' \
+        ! -name '*.bak' \
+        ! -name '*.swp' \
+        ! -name '*.swo' \
+        -print
+}
+
 stow_packages() {
-    # List of all stow packages
-    local packages=(
-        zsh
-        bash
-        git
-        wezterm
-        vim
-        tmux
-        nvim
-        ghostty
-        karabiner
-        aerospace
-        sketchybar
-        lazygit
-        yazi
-        btop
-        fish
-        atuin
-        spotify-player
-        calcure
-        zed
-        agents
-        codex
-        pi
-    )
-
-    info "Creating backup directory: $BACKUP_DIR"
-    mkdir -p "$BACKUP_DIR"
-
-    for package in "${packages[@]}"; do
+    local manifest="$BACKUP_DIR/manifest.tsv"
+    local backup_created=0
+    local package
+    for package in "${PACKAGES[@]}"; do
         local pkg_dir="$DOTFILES_DIR/$package"
         [ -d "$pkg_dir" ] || continue
 
         info "Stowing $package..."
 
         # Try stow, if it fails due to existing files, back them up first
-        if ! stow -d "$DOTFILES_DIR" -t "$HOME" --no-folding "$package" 2>/dev/null; then
-            warn "Conflict detected for $package, backing up existing files..."
+        if ! stow -d "$DOTFILES_DIR" -t "$HOME" "${STOW_ARGS[@]}" "$package" 2>/dev/null; then
+            warn "Conflict detected for $package; checking every target before changing anything..."
 
-            # Find all files in the stow package and back up their targets
+            # Refuse to replace any symlink not already pointing at this source.
             while IFS= read -r file; do
-                # Get the relative path (strip the package dir prefix)
                 local rel_path="${file#$pkg_dir/}"
                 local target="$HOME/$rel_path"
+                if [ -L "$target" ]; then
+                    local target_real source_real
+                    target_real="$(realpath "$target" 2>/dev/null || true)"
+                    source_real="$(realpath "$file" 2>/dev/null || true)"
+                    if [[ -z "$target_real" || "$target_real" != "$source_real" ]]; then
+                        error "Refusing to replace unrelated symlink: $target"
+                        error "It points to: $(readlink "$target")"
+                        return 1
+                    fi
+                fi
+            done < <(list_stow_files "$pkg_dir")
 
+            # Back up only real conflicting files/directories. Correct links stay.
+            while IFS= read -r file; do
+                local rel_path="${file#$pkg_dir/}"
+                local target="$HOME/$rel_path"
                 if [ -e "$target" ] && [ ! -L "$target" ]; then
                     local backup_path="$BACKUP_DIR/$rel_path"
+                    if ((backup_created == 0)); then
+                        mkdir -p "$BACKUP_DIR"
+                        printf 'target\tbackup\ttype\tsha256\n' >"$manifest"
+                        backup_created=1
+                    fi
                     mkdir -p "$(dirname "$backup_path")"
                     mv "$target" "$backup_path"
+                    local checksum="-"
+                    [[ -f "$backup_path" ]] && checksum="$(shasum -a 256 "$backup_path" | awk '{print $1}')"
+                    printf '%s\t%s\t%s\t%s\n' "$target" "$backup_path" "$(stat -f %HT "$backup_path")" "$checksum" >>"$manifest"
                     info "  Backed up: ~/$rel_path"
-                elif [ -L "$target" ]; then
-                    rm "$target"
                 fi
-            done < <(find "$pkg_dir" -type f)
+            done < <(list_stow_files "$pkg_dir")
 
             # Try stow again after backup
-            stow -d "$DOTFILES_DIR" -t "$HOME" --no-folding "$package"
+            stow -d "$DOTFILES_DIR" -t "$HOME" "${STOW_ARGS[@]}" "$package"
         fi
 
         success "Stowed $package"
@@ -312,7 +415,7 @@ link_pi_shared_skills() {
     success "pi shared skills: linked=$linked kept/skipped=$skipped"
 }
 
-# npm install for pi-skills packages that ship package.json (brave-search, browser-tools, …)
+# Install only reviewed, explicitly enabled skill packages.
 install_pi_skill_deps() {
     local pi_skills="$HOME/.pi/agent/skills"
     [ -d "$pi_skills" ] || return
@@ -322,16 +425,25 @@ install_pi_skill_deps() {
         return
     fi
 
-    local pkg_json dir
-    while IFS= read -r pkg_json; do
-        dir="$(dirname "$pkg_json")"
-        # Skip if node_modules already present
+    local approved=(
+        "pi-skills/brave-search"
+        "pi-skills/browser-tools"
+        "pi-skills/youtube-transcript"
+    )
+    local relative dir
+    for relative in "${approved[@]}"; do
+        dir="$pi_skills/$relative"
+        [[ -f "$dir/package.json" ]] || continue
         if [ -d "$dir/node_modules" ]; then
             continue
         fi
-        info "npm install in ${dir/#$HOME/~}..."
-        (cd "$dir" && npm install --no-fund --no-audit)
-    done < <(find "$pi_skills" -name package.json ! -path '*/node_modules/*' 2>/dev/null)
+        if [[ ! -f "$dir/package-lock.json" ]]; then
+            warn "Skipping unlocked skill dependency: $relative"
+            continue
+        fi
+        info "Installing locked dependencies for $relative..."
+        (cd "$dir" && npm ci --ignore-scripts --no-fund --no-audit)
+    done
 }
 
 setup_pi_agent() {
@@ -352,8 +464,8 @@ setup_pi_agent() {
     local install_dir
     install_dir="$(cd "$(dirname "$(realpath "$agent_dir/package.json")")" && pwd)"
 
-    info "Installing pi agent dependencies (extensions) in $install_dir ..."
-    (cd "$install_dir" && npm install --no-fund --no-audit)
+    info "Installing locked pi agent dependencies (extensions) in $install_dir ..."
+    (cd "$install_dir" && npm ci --no-fund --no-audit)
     success "pi agent dependencies installed"
 
     link_pi_shared_skills
@@ -369,12 +481,14 @@ setup_pi_agent() {
 # 13. Secrets file template
 # ============================================================================
 setup_secrets() {
+    umask 077
     if [ -f "$HOME/.zshrc.secrets" ]; then
+        chmod 600 "$HOME/.zshrc.secrets"
         success "Secrets file already exists at ~/.zshrc.secrets"
     else
         warn "No ~/.zshrc.secrets file found!"
         info "Creating template at ~/.zshrc.secrets"
-        cat > "$HOME/.zshrc.secrets" << 'SECRETS_EOF'
+        cat >"$HOME/.zshrc.secrets" <<'SECRETS_EOF'
 # API Keys and Secrets - DO NOT COMMIT THIS FILE
 # Fill in your API keys below
 
@@ -389,6 +503,7 @@ export KAMAL_REGISTRY_PASSWORD=""
 # Optional: also used by some tools; pi firecrawl uses ~/.pi/agent/.env
 export FIRECRAWL_API_KEY=""
 SECRETS_EOF
+        chmod 600 "$HOME/.zshrc.secrets"
         warn "Edit ~/.zshrc.secrets and add your API keys"
     fi
 }
@@ -397,6 +512,10 @@ SECRETS_EOF
 # 14. macOS Defaults (optional)
 # ============================================================================
 set_macos_defaults() {
+    if ((NON_INTERACTIVE == 1)); then
+        info "Skipping opt-in macOS defaults in non-interactive mode"
+        return
+    fi
     echo ""
     read -p "$(echo -e "${YELLOW}Set recommended macOS defaults? (y/n): ${NC}")" -n 1 -r
     echo ""
@@ -442,57 +561,6 @@ set_macos_defaults() {
 }
 
 # ============================================================================
-# 14. GitHub repo creation
-# ============================================================================
-create_github_repo() {
-    echo ""
-    read -p "$(echo -e "${YELLOW}Create GitHub repo 'dotfiles'? (y/n): ${NC}")" -n 1 -r
-    echo ""
-
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        info "Skipping GitHub repo creation"
-        return
-    fi
-
-    if ! command -v gh &>/dev/null; then
-        error "GitHub CLI (gh) not installed. Run: brew install gh"
-        return 1
-    fi
-
-    if ! gh auth status &>/dev/null; then
-        info "Authenticating with GitHub..."
-        gh auth login
-    fi
-
-    # Check if repo already exists
-    if gh repo view "$(gh api user -q .login)/dotfiles" &>/dev/null; then
-        success "GitHub repo 'dotfiles' already exists"
-    else
-        info "Creating GitHub repo..."
-        gh repo create dotfiles --public --description "My macOS dotfiles - managed with GNU Stow" --source="$DOTFILES_DIR" --push
-        success "GitHub repo created and pushed"
-    fi
-}
-
-# ============================================================================
-# 15. Start services
-# ============================================================================
-start_services() {
-    echo ""
-    read -p "$(echo -e "${YELLOW}Start sketchybar service? (y/n): ${NC}")" -n 1 -r
-    echo ""
-
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        info "Skipping service startup"
-        return
-    fi
-
-    info "Starting services..."
-    brew services start sketchybar 2>/dev/null && success "sketchybar started" || warn "sketchybar failed to start"
-    info "AeroSpace is a cask app with start-at-login; open it once if needed: open -a AeroSpace"
-}
-
-# ============================================================================
 # Main
 # ============================================================================
 main() {
@@ -501,6 +569,13 @@ main() {
     echo -e "${GREEN}  Dotfiles Bootstrap Script${NC}"
     echo -e "${GREEN}========================================${NC}"
     echo ""
+
+    preflight
+    if ((DRY_RUN == 1)); then
+        show_dry_run
+        success "Dry run complete"
+        return
+    fi
 
     # Core setup
     install_xcode_cli
@@ -530,7 +605,7 @@ main() {
 
     # Optional
     set_macos_defaults
-    start_services
+    info "AeroSpace owns SketchyBar startup; no duplicate Brew service is started"
 
     echo ""
     echo -e "${GREEN}========================================${NC}"

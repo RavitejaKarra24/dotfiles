@@ -7,14 +7,12 @@ return {
       python = "python3 %s",
       rust = "cargo run",
       go = "go run %s",
-      c = "gcc %s -o /tmp/c_out && /tmp/c_out",
-      cpp = "g++ %s -o /tmp/cpp_out && /tmp/cpp_out",
       lua = "lua %s",
       sh = "bash %s",
       bash = "bash %s",
       zsh = "zsh %s",
       ruby = "ruby %s",
-      java = "javac %s && java %s",
+      java = "javac -d %s %s && java -cp %s %s",
     }
 
     local function run_file()
@@ -28,11 +26,29 @@ return {
       local file = vim.fn.expand("%:p")
       vim.cmd("write")
 
-      -- Java needs the class name (filename without extension) for the second arg
       local cmd
       if ft == "java" then
+        local output_dir = vim.fn.tempname()
+        vim.fn.mkdir(output_dir, "p")
         local classname = vim.fn.expand("%:t:r")
-        cmd = string.format(template, vim.fn.shellescape(file), classname)
+        cmd = string.format(
+          template,
+          vim.fn.shellescape(output_dir),
+          vim.fn.shellescape(file),
+          vim.fn.shellescape(output_dir),
+          vim.fn.shellescape(classname)
+        ) .. "; status=$?; rm -rf " .. vim.fn.shellescape(output_dir) .. "; exit $status"
+      elseif ft == "c" or ft == "cpp" then
+        local output = vim.fn.tempname()
+        local compiler = ft == "c" and "gcc" or "g++"
+        cmd = string.format(
+          "%s %s -o %s && %s; status=$?; rm -f %s; exit $status",
+          compiler,
+          vim.fn.shellescape(file),
+          vim.fn.shellescape(output),
+          vim.fn.shellescape(output),
+          vim.fn.shellescape(output)
+        )
       else
         cmd = string.format(template, vim.fn.shellescape(file))
       end
@@ -117,11 +133,11 @@ return {
       end
 
       if pkg then
-        vim.cmd("botright 10split | terminal " .. pm .. " " .. pkg)
+        vim.cmd("botright 10split | terminal " .. pm .. " " .. vim.fn.shellescape(pkg))
       else
         vim.ui.input({ prompt = pm .. " " }, function(input)
           if not input or input == "" then return end
-          vim.cmd("botright 10split | terminal " .. pm .. " " .. input)
+          vim.cmd("botright 10split | terminal " .. pm .. " " .. vim.fn.shellescape(input))
         end)
       end
     end

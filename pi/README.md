@@ -26,7 +26,10 @@ Cross-agent skills live in the **`agents`** package (`~/.agents/skills/`).
 
 ## Fresh machine
 
-`./install.sh` stows `agents` + `pi`, installs `@earendil-works/pi-coding-agent` if needed, runs `npm install` in `~/.pi/agent`, links shared skills, and installs skill npm deps.
+`./install.sh` stows `agents` + `pi`, installs
+`@earendil-works/pi-coding-agent` if needed, runs `npm ci` in the unified
+workspace, links shared skills, and installs only allowlisted skill
+dependencies from lockfiles.
 
 Manual:
 
@@ -36,15 +39,16 @@ stow -d ~/.dotfiles -t ~ --no-folding pi
 npm install -g @earendil-works/pi-coding-agent
 # Install next to the *real* package.json (stow target). Extensions resolve
 # modules from that path, not from ~/.pi/agent/node_modules alone.
-cd "$(dirname "$(realpath ~/.pi/agent/package.json)")" && npm install
+cd "$(dirname "$(realpath ~/.pi/agent/package.json)")" && npm ci
 # link shared skills into pi (or re-run install.sh setup)
 for s in ~/.agents/skills/*; do
   name=$(basename "$s")
   dest=~/.pi/agent/skills/"$name"
   [ -e "$dest" ] || ln -s "../../../.agents/skills/$name" "$dest"
 done
-# optional skill package deps
-find ~/.pi/agent/skills -name package.json ! -path '*/node_modules/*' -execdir npm install --no-fund --no-audit \;
+# optional reviewed skill package deps
+cd ~/.pi/agent/skills/pi-skills/brave-search
+npm ci --ignore-scripts --no-fund --no-audit
 cp ~/.pi/agent/.env.example ~/.pi/agent/.env   # set FIRECRAWL_API_KEY if desired
 ```
 

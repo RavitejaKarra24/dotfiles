@@ -40,8 +40,15 @@ vim.keymap.set("i", "<C-c>", "<Esc>")
 -- Disable Ex mode
 vim.keymap.set("n", "Q", "<nop>")
 
--- Open tmux sessionizer
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+-- Open the tracked tmux sessionizer when its dependencies are available.
+vim.keymap.set("n", "<C-f>", function()
+    local sessionizer = vim.fn.expand("~/.local/bin/tmux-sessionizer")
+    if vim.fn.executable(sessionizer) ~= 1 or vim.fn.executable("tmux") ~= 1 then
+        vim.notify("tmux-sessionizer requires tmux, ghq, and fzf", vim.log.levels.WARN)
+        return
+    end
+    vim.fn.system({ "tmux", "new-window", sessionizer })
+end, { desc = "Open tmux sessionizer" })
 
 -- Format buffer: prefer conform when available, else LSP
 vim.keymap.set("n", "<leader>f", function()

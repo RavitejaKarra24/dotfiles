@@ -23,6 +23,9 @@ function task(prompt: string): SpawnTask {
 }
 
 async function claudeAvailable() {
+  if (process.env.PI_LIVE_INTEGRATION !== "1") {
+    return false;
+  }
   return Effect.runPromise(claudeBackend.available);
 }
 

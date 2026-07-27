@@ -25,7 +25,7 @@ return {
         markdown = { "prettier" },
         rust = { "rustfmt" },
         go = { "gofmt" },
-        python = { "ruff_format", "black" },
+        python = { "ruff_format" },
         lua = { "stylua" },
       },
       formatters = {

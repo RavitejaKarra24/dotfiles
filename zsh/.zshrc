@@ -1,16 +1,7 @@
 # keychain id_rsa --agents ssh  # moved before instant prompt
 
-# OK to perform console I/O before this point.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-# From this point on, until zsh is fully initialized, console input won't work and
-# console output may appear uncolored.
-
-# chatty-script >/dev/null      # spam output suppressed
-# ...
-
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+typeset -U path PATH
 
 # Keep package metadata fresh when running `brew upgrade`. Homebrew separately
 # caches repository updates for 24 hours and formula/cask API data for 450
@@ -97,6 +88,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting web-search)
 
+[[ -d "$HOME/.grok/completions/zsh" ]] && fpath=("$HOME/.grok/completions/zsh" $fpath)
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -128,12 +120,12 @@ source $ZSH/oh-my-zsh.sh
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.config/zsh/theme.zsh ]] || source ~/.config/zsh/theme.zsh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-export PATH="/usr/local/opt/adoptopenjdk11/bin:$PATH"
+[[ -d /usr/local/opt/adoptopenjdk11/bin ]] && path=(/usr/local/opt/adoptopenjdk11/bin $path)
 # eval "$(gh copilot alias -- zsh)"
 
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
-export PATH=$PATH:$HOME/go/bin
+[[ -d "$HOME/go/bin" ]] && path=($path "$HOME/go/bin")
 
 # ---- NVM (lazy-loaded on first use) ----
 export NVM_DIR="$HOME/.nvm"
@@ -159,15 +151,20 @@ HISTSIZE=5000
 setopt share_history
 setopt hist_expire_dups_first
 setopt hist_ignore_dups
+setopt hist_ignore_space
 setopt hist_verify
 
 bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
 
 # ---- Eza / Zoxide ----
-alias ls="eza --icons=always"
-eval "$(zoxide init zsh)"
-alias cd="z"
+if command -v eza >/dev/null 2>&1; then
+  alias ls="eza --icons=always"
+fi
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+  alias cd="z"
+fi
 
 # ---- Secrets (API keys, tokens - not tracked by git) ----
 [[ -f ~/.zshrc.secrets ]] && source ~/.zshrc.secrets
@@ -175,10 +172,16 @@ alias cd="z"
 function cursor() {
     if [[ $# = 0 ]]; then
         open -a "Cursor"
+    elif [[ -n "${commands[cursor]:-}" ]]; then
+        "${commands[cursor]}" "$@"
     else
-        local argPath="$1"
-        [[ $1 = /* ]] && argPath="$1" || argPath="$PWD/${1#./}"
-        open -a "Cursor" "$argPath"
+        local arg arg_path
+        local -a paths
+        for arg in "$@"; do
+            [[ "$arg" = /* ]] && arg_path="$arg" || arg_path="$PWD/${arg#./}"
+            paths+=("$arg_path")
+        done
+        open -a "Cursor" "${paths[@]}"
     fi
 }
 
@@ -193,26 +196,36 @@ export VISUAL="nvim"
 
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	rm -f -- "$tmp"
+	{
+		yazi "$@" --cwd-file="$tmp"
+		if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+			builtin cd -- "$cwd"
+		fi
+	} always {
+		rm -f -- "$tmp"
+	}
 }
 
 # Daily driver aliases
 alias n="nvim"
 alias lg="lazygit"
 alias bt="btop"
-alias gq='cd "$(ghq list -p | fzf)"'
+gq() {
+  local selected
+  selected="$(ghq list -p | fzf)" || return
+  [[ -n "$selected" ]] || return
+  builtin cd -- "$selected"
+}
 
-eval "$(atuin init zsh)"
+if command -v atuin >/dev/null 2>&1; then
+  eval "$(atuin init zsh)"
+fi
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/ravitejakarra/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/ravitejakarra/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f "$HOME/Downloads/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/path.zsh.inc"; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/ravitejakarra/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/ravitejakarra/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc"; fi
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
@@ -227,24 +240,23 @@ alias k="kubectl"
 # Mac setup for pomo
 alias work="timer 60m && terminal-notifier -message 'Pomodoro'\
         -title 'Work Timer is up! Take a Break'\
-        -appIcon '~/Pictures/pumpkin.png'\
+        -appIcon \"$HOME/Pictures/pumpkin.png\"\
         -sound Crystal"
         
 alias rest="timer 10m && terminal-notifier -message 'Pomodoro'\
         -title 'Break is over! Get back to work'\
-        -appIcon '~/Pictures/pumpkin.png'\
+        -appIcon \"$HOME/Pictures/pumpkin.png\"\
         -sound Crystal"
 
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
 
 
-eval "$(rbenv init -)"
-
-
-export XDG_CONFIG_HOME="$HOME/.config"
+if command -v rbenv >/dev/null 2>&1; then
+  eval "$(rbenv init - zsh)"
+fi
 
 # Added by Antigravity
-export PATH="/Users/ravitejakarra/.antigravity/antigravity/bin:$PATH"
+[[ -d "$HOME/.antigravity/antigravity/bin" ]] && path=("$HOME/.antigravity/antigravity/bin" $path)
 
 #dictionary
 dict() {
@@ -258,20 +270,21 @@ dict() {
     echo "------------------------------------------"
 
     # 1. Try Native macOS Offline Dictionary
-    local offline_result=$(python3 -c "
+    local offline_result
+    offline_result=$(python3 - "$word" <<'PY' 2>/dev/null
 try:
     from DictionaryServices import DCSCopyTextDefinition
     import sys
-    # Look up word
-    result = DCSCopyTextDefinition(None, '$word', (0, len('$word')))
+    word = sys.argv[1]
+    result = DCSCopyTextDefinition(None, word, (0, len(word)))
     if result:
-        # Clean up double newlines often found in macOS dict output
         print(result.strip())
         sys.exit(0)
     sys.exit(1)
-except:
+except Exception:
     sys.exit(1)
-" 2>/dev/null)
+PY
+)
 
     if [[ -n "$offline_result" ]]; then
         echo -e "\033[1;32m[OFFLINE]\033[0m"
@@ -282,8 +295,14 @@ except:
         
         # Using the Free Dictionary API + jq for clean formatting
         # If you don't have 'jq' installed, run: brew install jq
-        local api_url="https://api.dictionaryapi.dev/api/v2/entries/en/$word"
-        local response=$(curl -s "$api_url")
+        local encoded_word
+        encoded_word=$(python3 -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$word") || return
+        local api_url="https://api.dictionaryapi.dev/api/v2/entries/en/$encoded_word"
+        local response
+        if ! response=$(curl --fail --silent --show-error --max-time 10 "$api_url"); then
+            echo "Online lookup failed."
+            return 1
+        fi
 
         if [[ "$response" == *"title\":\"No Definitions Found"* ]]; then
              echo "Word not found. (Check your spelling: '$word'?)"
@@ -321,25 +340,23 @@ except:
 #
 # precmd_functions+=(_fahh_on_error)
 
-export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+[[ -d "$HOME/.local/share/solana/install/active_release/bin" ]] && path=("$HOME/.local/share/solana/install/active_release/bin" $path)
 
 # Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/ravitejakarra/.lmstudio/bin"
+[[ -d "$HOME/.lmstudio/bin" ]] && path=($path "$HOME/.lmstudio/bin")
 # End of LM Studio CLI section
 
 alias rust-book='open -a "Zen Browser" ~/dock/raviteja/rust/book/book/index.html'
 
 # Added by Antigravity IDE
-export PATH="/Users/ravitejakarra/.antigravity-ide/antigravity-ide/bin:$PATH"
+[[ -d "$HOME/.antigravity-ide/antigravity-ide/bin" ]] && path=("$HOME/.antigravity-ide/antigravity-ide/bin" $path)
 
 # >>> grok installer >>>
-export PATH="$HOME/.grok/bin:$PATH"
-fpath=(~/.grok/completions/zsh $fpath)
-autoload -Uz compinit && compinit -C
+[[ -d "$HOME/.grok/bin" ]] && path=("$HOME/.grok/bin" $path)
 # <<< grok installer <<<
 # Global npm bin if available (avoid slow `npm bin -g` every shell)
-[[ -d "$HOME/.npm-global/bin" ]] && export PATH="$HOME/.npm-global/bin:$PATH"
-[[ -d /opt/homebrew/bin ]] && export PATH="/opt/homebrew/bin:$PATH"
+[[ -d "$HOME/.npm-global/bin" ]] && path=("$HOME/.npm-global/bin" $path)
+[[ -d /opt/homebrew/bin ]] && path=(/opt/homebrew/bin $path)
 
 # Added by Antigravity CLI installer
-export PATH="/Users/ravitejakarra/.local/bin:$PATH"
+[[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
