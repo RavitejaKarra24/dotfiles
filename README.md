@@ -156,5 +156,5 @@ Run the complete local audit before committing:
 ```
 
 Use `./doctor.sh --quick` for config syntax, application-aware Yazi validation,
-and a disposable Stow plan without the Pi test suite. CI runs portable checks
-on Linux and application-aware configuration checks on macOS.
+and a disposable Stow plan without the Pi test suite. This personal repository
+is intentionally macOS-only and uses local validation rather than hosted CI.

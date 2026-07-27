@@ -4,15 +4,13 @@ set -Eeuo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 QUICK=0
-CI_MODE=0
 FAILURES=0
 
 for arg in "$@"; do
     case "$arg" in
     --quick) QUICK=1 ;;
-    --ci) CI_MODE=1 ;;
     -h | --help)
-        echo "Usage: $0 [--quick] [--ci]"
+        echo "Usage: $0 [--quick]"
         exit 0
         ;;
     *)
@@ -174,7 +172,7 @@ else
     warn "Gitleaks is unavailable"
 fi
 
-if ((CI_MODE == 0)) && command -v brew >/dev/null 2>&1; then
+if command -v brew >/dev/null 2>&1; then
     run_check "Brewfile satisfaction" brew bundle check --file="$ROOT/Brewfile"
 fi
 

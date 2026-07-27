@@ -21,8 +21,8 @@ The high-confidence roadmap items were implemented on the
   one Python formatter;
 - a unified Pi npm workspace with exact Pi/Effect beta pins, one lockfile,
   deterministic default tests, and explicitly gated live integration tests;
-- `doctor.sh`, Linux/macOS CI, repository hygiene files, dependency declarations,
-  and third-party provenance guidance.
+- a local macOS-only `doctor.sh`, repository hygiene files, dependency
+  declarations, and third-party provenance guidance.
 
 Suggestions that are preference or policy decisions remain intentionally
 unforced: choosing only one terminal, removing one runtime manager, changing
@@ -35,8 +35,8 @@ The post-migration online npm audit reports no high/critical findings. It does
 report seven moderate findings inherited through `@hono/node-server` (a
 Windows encoded-backslash path traversal in static serving), with no upstream
 fix currently available. The configured environment is macOS and does not
-expose that Windows path behavior, but the advisory should remain visible in
-CI until upstream releases a fix.
+expose that Windows path behavior; retain this note for future dependency
+updates.
 
 ## Priority guide
 
@@ -110,11 +110,10 @@ The highest-value work is:
    fresh install fetch a different plugin graph over time. Commit it and update
    it deliberately.
 
-10. **[P1] Add one repository-wide validation command and CI workflow.**
-    The repo currently has no CI, pre-commit config, `.editorconfig`, or common
-    audit target. A dotfiles repository should be able to prove that configs
-    parse, dependencies align, secrets are absent, and a fresh Stow plan is
-    safe.
+10. **[P1] Add one repository-wide local validation command.**
+    The repo had no common audit target. A dotfiles repository should make it
+    easy to check locally that configs parse, dependencies align, secrets are
+    absent, and a fresh Stow plan is safe.
 
 ## Security and privacy
 
@@ -140,11 +139,12 @@ The highest-value work is:
   and avoid lifecycle scripts by default unless a package explicitly needs
   them.
 
-- **[P1] Add automated secret scanning.** Run a scanner such as Gitleaks in
-  pre-commit and CI, including Git history. The audit found no obvious live
-  token/private-key pattern in authored current config; two history matches
-  were in vendored UI data and appear to be false positives. Automated scans
-  should exclude known fixtures narrowly, not whole directories.
+- **[P1] Add automated secret scanning.** Run a scanner such as Gitleaks from
+  the local doctor, with an optional history scan before publishing changes.
+  The audit found no obvious live token/private-key pattern in authored current
+  config; two history matches were in vendored UI data and appear to be false
+  positives. Automated scans should exclude known fixtures narrowly, not whole
+  directories.
 
 - **[P1] Make history protection explicit.** Set Atuin's `secrets_filter =
   true` explicitly, add filters for commands containing authorization headers,
@@ -332,9 +332,9 @@ The highest-value work is:
 - **[P1] Install or remove configured opener tools.** The config references
   `exiftool` and `mediainfo`, but neither command is installed or declared.
 
-- **[P2] Decide whether Yazi is macOS-only.** If so, remove untested Linux and
-  Windows copied defaults. If cross-platform behavior matters, validate it in a
-  matrix and keep platform-specific overlays.
+- **[Resolved] Keep Yazi macOS-only.** The migrated minimal configuration avoids
+  copied Linux and Windows defaults. Future additions only need to support the
+  owner's macOS environment.
 
 ## AeroSpace and SketchyBar
 
@@ -479,14 +479,13 @@ The highest-value work is:
 - **[P1] Fix formatting drift.** `npm run format:check` currently reports
   `extensions/subagents/index.ts` and `settings.json`.
 
-- **[P1] Make `npm run check`, unit tests, and format checks mandatory in CI.**
-  Do not update pi dependencies or settings automatically unless these checks
-  pass together.
+- **[P1] Run `npm run check`, unit tests, and format checks together locally.**
+  Do not update pi dependencies or settings unless these checks pass together.
 
 - **[P1] Audit production dependencies online.** `npm audit` could not complete
   in the restricted audit environment, so vulnerability status remains
-  unverified. Run it in trusted CI with network access and a defined severity
-  policy.
+  unverified. Run it locally with network access during dependency updates and
+  use a defined severity policy.
 
 - **[P1] Keep volatile app state out of durable config.** Codex's marketplace
   timestamps, app version, trusted browser hashes, generated runtime paths,
@@ -502,8 +501,9 @@ The highest-value work is:
   separate subtree/repository and mark it as vendored.
 
 - **[P2] Add skill integrity verification.** Recompute each locked skill hash
-  in CI, fail on unexplained local changes, and produce a reviewable update
-  report with source, old/new revision, license, and executable files.
+  in the local doctor or update command, fail on unexplained changes, and
+  produce a reviewable update report with source, old/new revision, license,
+  and executable files.
 
 - **[P2] Avoid installing every discovered skill dependency.** Install only
   dependencies for enabled/approved skills. This reduces supply-chain exposure,
@@ -642,9 +642,9 @@ The highest-value work is:
   - Broken-symlink, executable-bit, and missing-command checks.
   - README link and “documented feature is active” checks.
 
-- **[P1] Add CI with minimal write permissions.** Use Linux for portable syntax
-  and Node checks, plus a macOS job for Brew/Stow/application-aware smoke tests.
-  Cache downloads but build from a clean dependency tree.
+- **[Resolved] Keep validation local.** This is a personal macOS-only repository,
+  so `doctor.sh` is the validation entry point and no hosted CI workflow is
+  needed.
 
 - **[P1] Test bootstrap idempotence.** In a disposable HOME: run install, run it
   again, verify the second plan has no changes, introduce file and symlink
@@ -676,7 +676,7 @@ The highest-value work is:
   was unavailable in the restricted audit environment.
 - Neovim reached config startup, but the restricted environment prevented
   writes to its normal state/parser directories. Use an isolated writable XDG
-  state/data fixture for a reliable CI smoke test.
+  state/data fixture for a reliable local smoke test.
 - `npm run check` fails on dependency/type skew.
 - `npm run format:check` fails on two files.
 - pi tests: 105 passed, 2 skipped, 2 live Codex tests failed for an
@@ -714,7 +714,7 @@ The highest-value work is:
 
 ### Phase 4: keep it great
 
-- Add CI and pre-commit validation.
+- Keep `doctor.sh` as an optional local macOS health check.
 - Add controlled dependency/skill/plugin updates.
 - Generate all themes from one source.
 - Track startup time, config health, and idempotence as regression budgets.
