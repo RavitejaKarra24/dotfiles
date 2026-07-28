@@ -65,8 +65,7 @@ sketchybar --default "${defaults[@]}"
 #                                Left side
 ###############################################################################
 
-# AeroSpace workspace indicators and rotating philosophical quotes
-source "$ITEM_DIR/aerospace.sh"
+# Rotating philosophical quotes (AeroSpace workspace indicators disabled)
 source "$ITEM_DIR/quotes.sh"
 
 ###############################################################################
