@@ -1,4 +1,10 @@
-// Zed settings
+// Durable Zed settings.
+//
+// The live file at ~/.config/zed/settings.json is machine-local and
+// gitignored, because Zed rewrites agent.default_model whenever the model is
+// switched in the UI. install.sh copies this seed into place on a machine that
+// has no settings yet. Update it by hand when a setting is worth carrying to
+// another Mac.
 //
 // For information on how to configure Zed, see the Zed
 // documentation: https://zed.dev/docs/configuring-zed

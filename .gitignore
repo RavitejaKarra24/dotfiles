@@ -6,6 +6,14 @@
 # Secrets - NEVER commit these
 zsh/.zshrc.secrets
 
+# App-rewritten settings files. These churn on every model switch, plugin
+# refresh, or trust prompt, so the live copies stay machine-local and the
+# durable settings are tracked under seeds/ instead. install.sh seeds a fresh
+# machine from there before stowing. (codex/.codex/config.toml is covered by
+# the Codex allowlist further down.)
+zed/.config/zed/settings.json
+pi/.pi/agent/settings.json
+
 # Application state/cache (not config)
 calcure/.config/calcure/events.csv
 calcure/.config/calcure/tasks.csv
@@ -47,7 +55,8 @@ node_modules/
 # Codex — track only durable config; never auth or runtime state
 codex/.codex/*
 !codex/.codex/AGENTS.md
-!codex/.codex/config.toml
+# config.toml stays ignored: Codex rewrites it constantly. Durable settings
+# live in seeds/codex/config.toml.
 !codex/.codex/keybindings.json
 !codex/.codex/rules/
 codex/.codex/rules/*

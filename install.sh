@@ -269,7 +269,44 @@ install_bun() {
 }
 
 # ============================================================================
-# 11. Backup existing configs & Stow symlinks
+# 11. Seed the app-rewritten config files
+# ============================================================================
+# Codex, Zed, and pi rewrite their own settings files on every model switch,
+# plugin refresh, or trust prompt, so the live copies are gitignored and only
+# the durable settings are tracked under seeds/. A fresh clone therefore has no
+# file for Stow to link, so materialise it before stowing. An existing file is
+# never overwritten: it is the machine's live state.
+SEEDED_CONFIGS=(
+    "seeds/codex/config.toml:codex/.codex/config.toml"
+    "seeds/zed/settings.json:zed/.config/zed/settings.json"
+    "seeds/pi/settings.json:pi/.pi/agent/settings.json"
+)
+
+seed_local_configs() {
+    local entry seed_rel dest_rel seed dest
+    for entry in "${SEEDED_CONFIGS[@]}"; do
+        seed_rel="${entry%%:*}"
+        dest_rel="${entry#*:}"
+        seed="$DOTFILES_DIR/$seed_rel"
+        dest="$DOTFILES_DIR/$dest_rel"
+
+        if [ -e "$dest" ]; then
+            success "Local config already present: $dest_rel"
+            continue
+        fi
+        if [ ! -f "$seed" ]; then
+            warn "Missing seed for $dest_rel: $seed_rel"
+            continue
+        fi
+
+        mkdir -p "$(dirname "$dest")"
+        cp "$seed" "$dest"
+        success "Seeded $dest_rel from $seed_rel"
+    done
+}
+
+# ============================================================================
+# 12. Backup existing configs & Stow symlinks
 # ============================================================================
 list_stow_files() {
     local package_dir="$1"
@@ -593,6 +630,9 @@ main() {
     install_nvm
     install_bun
     install_pi
+
+    # Materialise gitignored app-rewritten configs so Stow has files to link
+    seed_local_configs
 
     # Symlink configs
     stow_packages

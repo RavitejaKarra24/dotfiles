@@ -1,0 +1,37 @@
+# Durable Codex settings.
+#
+# The live file at ~/.codex/config.toml is machine-local and gitignored,
+# because Codex rewrites it constantly with project trust entries, marketplace
+# timestamps, plugin state, app version numbers, and browser client hashes.
+# install.sh copies this seed into place on a machine that has no config yet.
+#
+# Update this file by hand when a setting is worth carrying to another Mac.
+
+model = "gpt-5.6-sol"
+model_reasoning_effort = "high"
+service_tier = "default"
+approvals_reviewer = "auto_review"
+plan_mode_reasoning_effort = "high"
+
+[features]
+multi_agent = true
+js_repl = false
+
+[desktop]
+default-service-tier = "priority"
+followUpQueueMode = "queue"
+dock-icon-preference = "codex-system"
+conversationDetailMode = "STEPS_COMMANDS"
+realtimeVoiceScreenContextEnabled = true
+
+[desktop.open-in-target-preferences]
+global = "ghostty"
+
+################################################################################
+# Dynamic skill routing: keep every installed skill enabled and available for
+# explicit loading, but do not inject the full global catalog into every thread.
+# ~/.codex/AGENTS.md invokes the on-demand router before substantive work.
+################################################################################
+
+[skills]
+include_instructions = false

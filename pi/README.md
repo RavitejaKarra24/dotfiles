@@ -56,6 +56,12 @@ cp ~/.pi/agent/.env.example ~/.pi/agent/.env   # set FIRECRAWL_API_KEY if desire
 
 - `auth.json`, `.env`, `sessions/`, `models-store.json`, `node_modules/`, `bin/`
 - Skill `node_modules` (reinstalled by `install.sh`)
+- `settings.json` — pi rewrites `lastChangelogVersion` on upgrade and reformats
+  the file, so the live copy is machine-local. The durable settings (default
+  model and provider, thinking level, theme, and the curated skill allow/deny
+  list) live in `seeds/pi/settings.json`, which `install.sh` copies into place
+  on a machine that has no settings yet. Edit the seed by hand to carry a
+  change to another Mac.
 
 ## Firecrawl
 

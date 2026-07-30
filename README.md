@@ -58,6 +58,7 @@ each project so dependency changes, lockfiles, and tests stay together.
 | `pi/` | pi coding agent global config (`~/.pi/agent`) — extensions, themes, pi-local skills |
 | `codex/` | Codex config (`~/.codex`) — settings, instructions, keybindings, rules, skill router |
 | `agents/` | Shared agent skills (`~/.agents/skills`) used by pi, Claude, Codex, Grok, … |
+| `seeds/` | Durable settings for the app-rewritten config files (see below) |
 | `Brewfile` | All Homebrew packages/casks |
 | `install.sh` | Safe bootstrap: preflight, Brew, Stow, dependencies |
 | `update.sh` | Update global packages, runtimes, apps, and editor extensions |
@@ -65,6 +66,20 @@ each project so dependency changes, lockfiles, and tests stay together.
 | `uninstall.sh` / `restore.sh` | Remove managed links and restore conflict backups |
 
 Neovim keybindings: see [`nvim/.config/nvim/README.md`](nvim/.config/nvim/README.md).
+
+### App-rewritten settings (`seeds/`)
+
+Codex, Zed, and pi rewrite their own settings files whenever a model is switched, a plugin refreshes, or a directory is trusted. Because those files are Stow symlinks into this repository, every such change dirtied the working tree with values that are timestamps, absolute paths into app bundles, or client hashes.
+
+Three files are therefore gitignored and stay machine-local:
+
+| Live file (gitignored) | Tracked seed | Why it churns |
+|---|---|---|
+| `codex/.codex/config.toml` | `seeds/codex/config.toml` | Project trust entries, marketplace timestamps, plugin state, app version, browser client hashes |
+| `zed/.config/zed/settings.json` | `seeds/zed/settings.json` | `agent.default_model` rewritten on every model switch |
+| `pi/.pi/agent/settings.json` | `seeds/pi/settings.json` | `lastChangelogVersion` rewritten on upgrade |
+
+The seeds hold the settings worth carrying to another Mac. `install.sh` copies a seed into place only when the live file is missing, so an existing machine's state is never overwritten. To carry a deliberate change to another Mac, edit the seed by hand — changing the setting in the app alone no longer reaches the repository, which is the point.
 
 ## Window management (AeroSpace)
 
