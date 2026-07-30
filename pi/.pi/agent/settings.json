@@ -33,7 +33,9 @@
   "packages": [
     {
       "source": "npm:pi-spark",
-      "themes": ["!themes/github-dark-default.json"]
+      "themes": [
+        "!themes/github-dark-default.json"
+      ]
     }
   ]
 }

@@ -25,11 +25,11 @@
     "agent": {
         "default_model": {
             "provider": "zed.dev",
-            "model": "gpt-5.6-luna",
-            "enable_thinking": false,
-            "effort": "low"
+            "model": "claude-sonnet-5",
+            "enable_thinking": true,
+            "effort": "high"
         },
-        "default_profile": "ask",
+        "default_profile": "write",
         "dock": "right",
         "favorite_models": [],
         "model_parameters": []
