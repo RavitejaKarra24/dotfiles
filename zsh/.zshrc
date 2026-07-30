@@ -360,3 +360,4 @@ alias rust-book='open -a "Zen Browser" ~/dock/raviteja/rust/book/book/index.html
 
 # Added by Antigravity CLI installer
 [[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
+[ -s "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
