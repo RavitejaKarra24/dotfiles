@@ -18,11 +18,19 @@ STOW_ARGS=(
     '--ignore=.*\.(log|tmp|bak|swp|swo)$'
 )
 
-if [[ "${1:-}" == "--dry-run" ]]; then
-    DRY_RUN=1
+while (($# > 0)); do
+    case "$1" in
+    --dry-run) DRY_RUN=1 ;;
+    -h | --help)
+        echo "Usage: $0 [--dry-run] [package...]"
+        echo "Removes the stow-managed symlinks. Packages and application data stay."
+        exit 0
+        ;;
+    *) break ;;
+    esac
     shift
-fi
-if (( $# > 0 )); then
+done
+if (($# > 0)); then
     PACKAGES=("$@")
 fi
 
@@ -32,9 +40,9 @@ for package in "${PACKAGES[@]}"; do
         exit 2
     }
     args=(--delete --verbose -d "$ROOT" -t "$HOME" "${STOW_ARGS[@]}" "$package")
-    if (( DRY_RUN == 1 )); then
+    if ((DRY_RUN == 1)); then
         output="$(mktemp "${TMPDIR:-/tmp}/dotfiles-unstow-output.XXXXXX")"
-        stow --simulate "${args[@]}" > "$output" 2>&1
+        stow --simulate "${args[@]}" >"$output" 2>&1
         count="$(rg -c '^UNLINK:' "$output" 2>/dev/null || echo 0)"
         printf '%s: %s managed links would be removed\n' "$package" "$count"
         rm -f -- "$output"
@@ -43,7 +51,7 @@ for package in "${PACKAGES[@]}"; do
     fi
 done
 
-if (( DRY_RUN == 1 )); then
+if ((DRY_RUN == 1)); then
     echo "Dry run complete; no links were removed."
 else
     echo "Dotfile links removed. Packages and application data were left intact."

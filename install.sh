@@ -149,7 +149,7 @@ install_homebrew() {
 # ============================================================================
 install_brew_packages() {
     info "Installing packages from Brewfile..."
-    brew bundle --file="$DOTFILES_DIR/Brewfile" --no-lock
+    brew bundle install --file="$DOTFILES_DIR/Brewfile"
     success "Brew packages installed"
 }
 
@@ -308,7 +308,7 @@ stow_packages() {
 
             # Refuse to replace any symlink not already pointing at this source.
             while IFS= read -r file; do
-                local rel_path="${file#$pkg_dir/}"
+                local rel_path="${file#"$pkg_dir"/}"
                 local target="$HOME/$rel_path"
                 if [ -L "$target" ]; then
                     local target_real source_real
@@ -324,7 +324,7 @@ stow_packages() {
 
             # Back up only real conflicting files/directories. Correct links stay.
             while IFS= read -r file; do
-                local rel_path="${file#$pkg_dir/}"
+                local rel_path="${file#"$pkg_dir"/}"
                 local target="$HOME/$rel_path"
                 if [ -e "$target" ] && [ ! -L "$target" ]; then
                     local backup_path="$BACKUP_DIR/$rel_path"

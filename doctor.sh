@@ -154,14 +154,22 @@ else
     warn "Neovim or its installed lazy.nvim cache is unavailable; Lua parsing still ran"
 fi
 
+BOOTSTRAP_SCRIPTS=(
+    "$ROOT/install.sh"
+    "$ROOT/update.sh"
+    "$ROOT/doctor.sh"
+    "$ROOT/restore.sh"
+    "$ROOT/uninstall.sh"
+)
+
 if command -v shellcheck >/dev/null 2>&1; then
-    run_check "ShellCheck bootstrap scripts" shellcheck "$ROOT/install.sh" "$ROOT/update.sh" "$ROOT/doctor.sh"
+    run_check "ShellCheck bootstrap scripts" shellcheck "${BOOTSTRAP_SCRIPTS[@]}"
 else
     warn "ShellCheck is unavailable"
 fi
 
 if command -v shfmt >/dev/null 2>&1; then
-    run_check "Shell formatting" shfmt -d -i 4 "$ROOT/install.sh" "$ROOT/update.sh" "$ROOT/doctor.sh"
+    run_check "Shell formatting" shfmt -d -i 4 "${BOOTSTRAP_SCRIPTS[@]}"
 else
     warn "shfmt is unavailable"
 fi

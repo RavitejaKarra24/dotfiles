@@ -117,9 +117,72 @@ skip_step() {
     printf '%s[SKIP]%s %s (%s)\n' "$YELLOW" "$RESET" "$label" "$reason"
 }
 
-brew_owns() {
-    local package="$1"
-    has brew && brew list --formula "$package" >/dev/null 2>&1
+BREW_PREFIX=''
+BREW_PACKAGES=''
+BREW_INVENTORY_LOADED=0
+
+load_brew_inventory() {
+    ((BREW_INVENTORY_LOADED)) && return 0
+    BREW_INVENTORY_LOADED=1
+    has brew || return 0
+
+    BREW_PREFIX="$(brew --prefix 2>/dev/null)"
+    BREW_PACKAGES=$'\n'"$(
+        brew list --formula -1 2>/dev/null
+        brew list --cask -1 2>/dev/null
+    )"$'\n'
+}
+
+# True when `brew upgrade` above already updated this tool, so re-updating it
+# here would fight Homebrew. Both halves matter: the package name alone is
+# misleading (brew lists its `ruby` even when /usr/bin/ruby wins on PATH), and
+# the install prefix alone is misleading (npm links its own global binaries
+# into the Homebrew prefix). Usage: brew_manages <command> [formula/cask name]
+brew_manages() {
+    local command_name="$1"
+    local package="${2:-$1}"
+    local command_path
+
+    load_brew_inventory
+    [[ -n "$BREW_PREFIX" ]] || return 1
+    [[ "$BREW_PACKAGES" == *$'\n'"$package"$'\n'* ]] || return 1
+    command_path="$(command -v "$command_name" 2>/dev/null)" || return 1
+    [[ "$command_path" == "$BREW_PREFIX"/* ]]
+}
+
+update_global_npm_packages() {
+    local root package path
+    local packages=()
+
+    root="$(npm root --global 2>/dev/null)"
+    if [[ -z "$root" ]]; then
+        skip_step "Global npm packages" "cannot resolve the global prefix"
+        return
+    fi
+
+    while IFS= read -r path; do
+        package="${path#"$root"/}"
+        # The listing leads with the prefix itself, which strips to nothing.
+        [[ "$package" != "$path" ]] || continue
+
+        # npm and corepack ship inside Homebrew's node formula. Updating them
+        # here rewrites files brew owns and is undone by the next node upgrade.
+        if [[ "$package" == npm || "$package" == corepack ]] &&
+            brew_manages npm node; then
+            skip_step "Global npm package: $package" "ships with Homebrew's node"
+            continue
+        fi
+
+        packages+=("$package")
+    done < <(npm ls --global --depth=0 --parseable 2>/dev/null)
+
+    if ((${#packages[@]} == 0)); then
+        skip_step "Global npm packages" "none installed"
+        return
+    fi
+
+    run_step "Update global npm packages (TypeScript, pi, etc.)" \
+        npm update --global "${packages[@]}"
 }
 
 update_cargo_packages() {
@@ -141,6 +204,8 @@ update_cargo_packages() {
             if [[ "$package" == "avm" ]] && has avm; then
                 run_step "Update Cargo package: avm" avm self-update
                 run_step "Update Anchor CLI to the latest version" avm update
+            elif brew_manages "$package"; then
+                skip_step "Cargo package: $package" "shadowed by Homebrew"
             elif [[ -n "$source_url" ]]; then
                 run_step "Update Cargo package: $package" \
                     cargo install --git "$source_url" "$package" --locked --force
@@ -193,6 +258,12 @@ $package
 
         seen="${seen}${package}"$'\n'
         found=1
+
+        if brew_manages "$(basename "$binary")"; then
+            skip_step "Go package: $package" "shadowed by Homebrew"
+            continue
+        fi
+
         run_step "Update Go package: $package" go install "${package}@latest"
     done
 
@@ -262,6 +333,8 @@ else
     mkdir -p "$DOTFILES_UPDATE_LOG_DIR"
     DOTFILES_UPDATE_LOG="$DOTFILES_UPDATE_LOG_DIR/update-$(date +%Y%m%d-%H%M%S).log"
     exec > >(tee -a "$DOTFILES_UPDATE_LOG") 2>&1
+    # Close the pipe and let tee drain, otherwise exiting can truncate the log.
+    trap 'exec 1>&- 2>&-; wait' EXIT
     printf 'Log: %s\n' "$DOTFILES_UPDATE_LOG"
     section "Pre-update version snapshot"
     show_versions
@@ -283,14 +356,13 @@ fi
 
 section "JavaScript and TypeScript"
 if has npm; then
-    run_step "Update global npm packages (TypeScript, pi, etc.)" \
-        npm update --global
+    update_global_npm_packages
 else
     skip_step "Global npm packages" "npm not installed"
 fi
 
 if has bun; then
-    if brew_owns bun; then
+    if brew_manages bun; then
         skip_step "Bun runtime" "managed by Homebrew"
     else
         run_step "Update Bun runtime" bun upgrade
@@ -302,7 +374,7 @@ else
 fi
 
 if has deno; then
-    if brew_owns deno; then
+    if brew_manages deno; then
         skip_step "Deno runtime" "managed by Homebrew"
     else
         run_step "Update Deno runtime" deno upgrade
@@ -330,7 +402,7 @@ fi
 
 section "Go"
 if has go; then
-    if brew_owns go; then
+    if brew_manages go; then
         skip_step "Go runtime" "managed by Homebrew"
     fi
     update_go_binaries
@@ -340,7 +412,7 @@ fi
 
 section "Python CLI tools"
 if has uv; then
-    if brew_owns uv; then
+    if brew_manages uv; then
         skip_step "uv runtime" "managed by Homebrew"
     else
         run_step "Update uv" uv self update
@@ -358,7 +430,7 @@ fi
 
 section "Ruby"
 if has gem; then
-    if brew_owns ruby; then
+    if brew_manages gem ruby; then
         skip_step "Ruby runtime and default gems" "managed by Homebrew"
     fi
     update_user_gems
