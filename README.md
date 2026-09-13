@@ -50,6 +50,7 @@ each project so dependency changes, lockfiles, and tests stay together.
 | `wezterm/` | WezTerm terminal |
 | `tmux/` | Terminal multiplexer |
 | `karabiner/` | Caps Lock → Meh / Escape |
+| `neru/` | Neru mouseless pointer control (hints, grid, scroll) on Hyper+* |
 | `sketchybar/` | macOS status bar |
 | `lazygit/` | Git TUI + delta |
 | `git/` | Global gitconfig (delta, aliases) |
@@ -91,10 +92,14 @@ The seeds hold the settings worth carrying to another Mac. `install.sh` copies a
 - **Meh + Shift + hjkl** → move window
 - **Alt + 1–9 / B E M N P T V** → workspaces
 - **Alt + Shift + …** → move window to workspace
-- SketchyBar starts with AeroSpace; workspace changes trigger bar updates
+- AeroSpace starts a display-aware controller: SketchyBar runs on the built-in
+  Mac display and stops whenever an external monitor is connected
+- Unplugging the monitor turns SketchyBar back on. The controller also checks
+  every two seconds to recover after sleep or an unexpected bar exit.
+- Workspace changes trigger SketchyBar updates while the bar is running
 
-Installer stows `aerospace`; AeroSpace is the single owner of SketchyBar
-startup.
+Installer stows `aerospace`; AeroSpace's display controller is the single owner
+of SketchyBar startup.
 
 ## Packages (Brewfile highlights)
 
@@ -171,5 +176,9 @@ Run the complete local audit before committing:
 ```
 
 Use `./doctor.sh --quick` for config syntax, application-aware Yazi validation,
-and a disposable Stow plan without the Pi test suite. This personal repository
-is intentionally macOS-only and uses local validation rather than hosted CI.
+bootstrap regression tests, and a disposable Stow plan without the Pi test suite.
+The secret scan checks current tracked and unignored files, including unstaged
+edits; machine-local settings and credentials stay outside that scan. Run the
+bootstrap regression tests alone with `python3 tests/test_bootstrap.py`.
+Yazi's application check needs terminal access. This personal repository is
+intentionally macOS-only and uses local validation rather than hosted CI.

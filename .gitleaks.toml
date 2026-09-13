@@ -1,0 +1,11 @@
+[extend]
+useDefault = true
+
+[[rules]]
+id = "curl-auth-header"
+
+[[rules.allowlists]]
+description = "Literal token placeholder in the bundled Colosseum setup example"
+condition = "AND"
+paths = ['''(^|/)agents/\.agents/skills/colosseum-copilot/SKILL\.md$''']
+regexes = ['''^TOKEN_VALUE$''']

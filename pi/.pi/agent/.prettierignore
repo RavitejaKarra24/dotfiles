@@ -1,0 +1,2 @@
+# Machine-local settings are rewritten by pi; durable defaults live in seeds/.
+/settings.json

@@ -1,3 +1,11 @@
 node_modules
 (^|/)(cache|tmp|temp)(/|$)
 .*\.(log|tmp|bak|swp|swo)$
+
+# A .stow-local-ignore replaces stow's built-in defaults rather than adding
+# to them, so the default ^/README.* and ^/LICENSE.* entries have to be
+# restored here. Without them every package README is linked to ~/README.md
+# and the packages collide with each other. Anchored at the package root, so
+# nested READMEs (e.g. skills/*/README.md) are still stowed.
+^/README.*
+^/LICENSE.*

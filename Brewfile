@@ -8,12 +8,9 @@
 tap "anomalyco/tap"
 tap "caarlos0/tap"
 tap "felixkratz/formulae"
-tap "homebrew/bundle"
-tap "homebrew/services"
-tap "jesseduffield/lazygit"
 tap "nikitabobko/tap"
-tap "opencode-ai/tap"
-tap "th-ch/youtube-music"
+tap "pear-devs/pear"
+tap "y3owk1n/tap"
 
 # ============================================================================
 # CLI Tools - Core
@@ -102,9 +99,12 @@ brew "felixkratz/formulae/sketchybar"  # macOS status bar
 cask "nikitabobko/tap/aerospace"  # Tiling WM
 cask "codex"
 cask "ghostty"                    # Terminal emulator
+cask "y3owk1n/tap/neru-nightly"   # Keyboard-driven mouseless pointer control
 cask "ubersicht"                  # Desktop widgets
 cask "wezterm"                    # Terminal emulator
-cask "th-ch/youtube-music/youtube-music"
+# Formerly th-ch/youtube-music; upstream renamed the project to Pear Desktop
+# and deleted the old tap (th-ch/homebrew-youtube-music now 404s).
+cask "pear-devs/pear/pear-desktop"
 
 # ============================================================================
 # Fonts
@@ -124,8 +124,9 @@ vscode "dbaeumer.vscode-eslint"
 vscode "dsznajder.es7-react-js-snippets"
 vscode "esbenp.prettier-vscode"
 vscode "formulahendry.code-runner"
-vscode "github.copilot"
-vscode "github.copilot-chat"
+# github.copilot / github.copilot-chat ship built into VS Code (>= 1.126) now.
+# Listing them makes brew bundle fail: the marketplace copy is older than the
+# bundled one and VS Code refuses the downgrade.
 vscode "github.github-vscode-theme"
 vscode "mechatroner.rainbow-csv"
 vscode "ms-python.debugpy"

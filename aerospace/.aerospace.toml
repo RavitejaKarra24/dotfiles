@@ -10,7 +10,11 @@ config-version = 2
 
 after-login-command = []
 
-after-startup-command = ['exec-and-forget sketchybar']
+# The controller starts SketchyBar only when no external display is connected
+# and keeps that state in sync as displays are connected or disconnected.
+after-startup-command = [
+    'exec-and-forget /bin/bash -lc "$HOME/.config/sketchybar/display_controller.sh"',
+]
 
 exec-on-workspace-change = ['/bin/bash', '-c',
     'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',

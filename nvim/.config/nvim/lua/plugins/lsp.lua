@@ -76,6 +76,15 @@ return {
       end)
 
       local servers = {
+        basedpyright = {
+          settings = {
+            basedpyright = {
+              analysis = {
+                autoImportCompletions = true,
+              },
+            },
+          },
+        },
         ts_ls = {},
         rust_analyzer = {},
         lua_ls = {

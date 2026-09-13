@@ -7,7 +7,7 @@ DRY_RUN=0
 PACKAGES=(
     zsh bash git wezterm vim tmux nvim ghostty karabiner aerospace
     sketchybar lazygit yazi btop fish atuin spotify-player calcure
-    zed agents codex pi
+    zed agents codex pi neru
 )
 STOW_ARGS=(
     --no-folding

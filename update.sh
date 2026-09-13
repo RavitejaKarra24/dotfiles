@@ -216,7 +216,7 @@ update_cargo_packages() {
         fi
     done < <(cargo install --list 2>/dev/null)
 
-    if ((!found)); then
+    if ((! found)); then
         skip_step "Cargo-installed CLI packages" "none installed"
     fi
 }
@@ -267,7 +267,7 @@ $package
         run_step "Update Go package: $package" go install "${package}@latest"
     done
 
-    if ((!found)); then
+    if ((! found)); then
         skip_step "Go-installed CLI packages" "none installed"
     fi
 }

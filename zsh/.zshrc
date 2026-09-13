@@ -255,9 +255,6 @@ if command -v rbenv >/dev/null 2>&1; then
   eval "$(rbenv init - zsh)"
 fi
 
-# Added by Antigravity
-[[ -d "$HOME/.antigravity/antigravity/bin" ]] && path=("$HOME/.antigravity/antigravity/bin" $path)
-
 #dictionary
 dict() {
     local word=$1
@@ -347,9 +344,6 @@ except:
 # End of LM Studio CLI section
 
 alias rust-book='open -a "Zen Browser" ~/dock/raviteja/rust/book/book/index.html'
-
-# Added by Antigravity IDE
-[[ -d "$HOME/.antigravity-ide/antigravity-ide/bin" ]] && path=("$HOME/.antigravity-ide/antigravity-ide/bin" $path)
 
 # >>> grok installer >>>
 [[ -d "$HOME/.grok/bin" ]] && path=("$HOME/.grok/bin" $path)

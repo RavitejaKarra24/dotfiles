@@ -12,3 +12,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export PATH="$PATH:/Users/ravitejakarra/.lmstudio/bin"
 # End of LM Studio CLI section
 
+
+
+# Added by Antigravity CLI installer
+export PATH="/Users/ravitejakarra/.local/bin:$PATH"

@@ -38,52 +38,52 @@ run_check() {
 }
 
 check_shell_syntax() {
-    local file
+    local file result=0
     while IFS= read -r file; do
-        bash -n "$file"
-    done < <(find "$ROOT" -type f -name '*.sh' \
-        ! -path '*/node_modules/*' \
-        ! -path '*/.git/*' \
-        ! -path '*/skills/*' -print)
+        bash -n "$file" || result=1
+    done < <(find "$ROOT" \( -name node_modules -o -name .git -o -name skills \) -prune \
+        -o -type f \( -name '*.sh' -o -name .bashrc -o -name sketchybarrc \) -print)
 
     while IFS= read -r file; do
-        zsh -n "$file"
+        zsh -n "$file" || result=1
     done < <(find "$ROOT/zsh" -type f \( -name '*.zsh' -o -name '.zshrc' -o -name '.zshenv' -o -name '.zprofile' \) -print)
+    return "$result"
 }
 
 check_json() {
-    local file
+    local file result=0
     while IFS= read -r file; do
-        jq empty "$file"
-    done < <(find "$ROOT" -type f -name '*.json' \
-        ! -path '*/node_modules/*' \
-        ! -path '*/skills/*' \
-        ! -path '*/zed/*' -print)
+        jq empty "$file" || result=1
+    done < <(find "$ROOT" \( -name node_modules -o -name .git -o -name skills -o -name zed \) -prune \
+        -o -type f -name '*.json' -print)
+    return "$result"
 }
 
 check_toml() {
     python3 - "$ROOT" <<'PY'
+import os
 import pathlib
 import sys
 import tomllib
 
 root = pathlib.Path(sys.argv[1])
 excluded = {"node_modules", ".git", "skills"}
-for path in root.rglob("*.toml"):
-    if excluded.intersection(path.parts):
-        continue
-    with path.open("rb") as handle:
-        tomllib.load(handle)
+for directory, children, files in os.walk(root):
+    children[:] = [name for name in children if name not in excluded]
+    for name in files:
+        if name.endswith(".toml"):
+            with (pathlib.Path(directory) / name).open("rb") as handle:
+                tomllib.load(handle)
 PY
 }
 
 check_lua() {
-    local file
+    local file result=0
     while IFS= read -r file; do
-        luac -p "$file"
-    done < <(find "$ROOT" -type f -name '*.lua' \
-        ! -path '*/node_modules/*' \
-        ! -path '*/skills/*' -print)
+        luac -p "$file" || result=1
+    done < <(find "$ROOT" \( -name node_modules -o -name .git -o -name skills \) -prune \
+        -o -type f -name '*.lua' -print)
+    return "$result"
 }
 
 check_stow() {
@@ -99,10 +99,15 @@ check_stow() {
     target="$(mktemp -d "${TMPDIR:-/tmp}/dotfiles-doctor-stow.XXXXXX")"
     output="$(mktemp "${TMPDIR:-/tmp}/dotfiles-doctor-stow-output.XXXXXX")"
 
-    for package in zsh bash git wezterm vim tmux nvim ghostty karabiner aerospace sketchybar lazygit yazi btop fish atuin spotify-player calcure zed agents codex pi; do
+    local packages=()
+    for package in zsh bash git wezterm vim tmux nvim ghostty karabiner aerospace sketchybar lazygit yazi btop fish atuin spotify-player calcure zed agents codex pi neru; do
         [[ -d "$ROOT/$package" ]] || continue
-        stow --simulate --verbose -d "$ROOT" -t "$target" "${stow_args[@]}" "$package" >>"$output" 2>&1 || result=1
+        packages+=("$package")
     done
+    stow --simulate --verbose -d "$ROOT" -t "$target" "${stow_args[@]}" "${packages[@]}" >"$output" 2>&1 || result=1
+    if ((result != 0)); then
+        cat "$output" >&2
+    fi
 
     local forbidden='node_modules|\.pi/agent/(sessions|workflows|bin)(/| )|\.pi/agent/(auth|trust|models-store)\.json|\.pi/agent/\.env( |$)'
     if rg -q "$forbidden" "$output"; then
@@ -116,7 +121,11 @@ check_stow() {
 }
 
 check_yazi() {
-    env YAZI_CONFIG_HOME="$ROOT/yazi/.config/yazi" yazi --debug >/dev/null
+    if command -v ya >/dev/null 2>&1 && ya env --help >/dev/null 2>&1; then
+        env YAZI_CONFIG_HOME="$ROOT/yazi/.config/yazi" ya env >/dev/null
+    else
+        env YAZI_CONFIG_HOME="$ROOT/yazi/.config/yazi" yazi --debug >/dev/null
+    fi
 }
 
 check_nvim() {
@@ -136,6 +145,39 @@ check_nvim() {
     return "$result"
 }
 
+check_secrets() {
+    local scan_dir result=0
+    scan_dir="$(mktemp -d "${TMPDIR:-/tmp}/dotfiles-doctor-secrets.XXXXXX")" || return 1
+    # Scan current tracked and unignored files, including unstaged edits.
+    # Keep Git history, dependencies, and machine-local auth out of this scan.
+    python3 - "$ROOT" "$scan_dir" <<'PY' || result=1
+import os
+import pathlib
+import shutil
+import subprocess
+import sys
+
+root, destination = map(pathlib.Path, sys.argv[1:])
+files = subprocess.check_output([
+    "git", "-C", str(root), "ls-files", "--cached", "--others", "--exclude-standard", "-z",
+])
+for name in set(files.split(b"\0")) - {b""}:
+    relative = pathlib.Path(os.fsdecode(name))
+    source = root / relative
+    if source.is_symlink() or not source.is_file():
+        continue
+    target = destination / relative
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(source, target)
+PY
+    if ((result == 0)); then
+        gitleaks detect --no-git --source "$scan_dir" --no-banner --redact || result=1
+    fi
+    rm -rf -- "$scan_dir"
+    return "$result"
+}
+
+run_check "Bootstrap regression tests" python3 "$ROOT/tests/test_bootstrap.py"
 run_check "Bash and Zsh syntax" check_shell_syntax
 run_check "JSON files" check_json
 run_check "TOML files" check_toml
@@ -175,7 +217,7 @@ else
 fi
 
 if command -v gitleaks >/dev/null 2>&1; then
-    run_check "Gitleaks worktree scan" gitleaks detect --source "$ROOT" --no-banner --redact
+    run_check "Gitleaks worktree scan" check_secrets
 else
     warn "Gitleaks is unavailable"
 fi

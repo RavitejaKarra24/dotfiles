@@ -17,6 +17,7 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 BACKUP_DIR="$HOME/.dotfiles-backup/$(date +%Y%m%d_%H%M%S)"
 DRY_RUN=0
 NON_INTERACTIVE=0
+BREW_BUNDLE_FAILED=0
 
 for arg in "$@"; do
     case "$arg" in
@@ -49,7 +50,7 @@ trap 'error "Failed at line $LINENO: $BASH_COMMAND"' ERR
 PACKAGES=(
     zsh bash git wezterm vim tmux nvim ghostty karabiner aerospace
     sketchybar lazygit yazi btop fish atuin spotify-player calcure
-    zed agents codex pi
+    zed agents codex pi neru
 )
 STOW_ARGS=(
     --no-folding
@@ -96,11 +97,17 @@ show_dry_run() {
     local target output planned
     target="$(mktemp -d "${TMPDIR:-/tmp}/dotfiles-stow.XXXXXX")"
     output="$(mktemp "${TMPDIR:-/tmp}/dotfiles-stow-output.XXXXXX")"
-    local package
+    local package packages=()
     for package in "${PACKAGES[@]}"; do
         [[ -d "$DOTFILES_DIR/$package" ]] || continue
-        stow --simulate --verbose -d "$DOTFILES_DIR" -t "$target" "${STOW_ARGS[@]}" "$package" >>"$output" 2>&1
+        packages+=("$package")
     done
+    if ! stow --simulate --verbose -d "$DOTFILES_DIR" -t "$target" "${STOW_ARGS[@]}" "${packages[@]}" >"$output" 2>&1; then
+        cat "$output" >&2
+        rm -rf -- "$target"
+        rm -f -- "$output"
+        return 1
+    fi
     planned="$(rg -c '^(LINK|MKDIR):' "$output" 2>/dev/null || echo 0)"
     success "Stow simulation is conflict-free ($planned planned links/directories)"
     rm -rf -- "$target"
@@ -149,8 +156,29 @@ install_homebrew() {
 # ============================================================================
 install_brew_packages() {
     info "Installing packages from Brewfile..."
-    brew bundle install --file="$DOTFILES_DIR/Brewfile"
-    success "Brew packages installed"
+    if brew bundle install --file="$DOTFILES_DIR/Brewfile"; then
+        success "Brew packages installed"
+        return 0
+    fi
+    # Never fatal. Third-party taps get renamed or deleted and marketplace
+    # extensions get absorbed into their editor; when that happens brew bundle
+    # exits non-zero and would otherwise abort the run before stow_packages,
+    # i.e. before a single dotfile is linked. Linking the configs is the point
+    # of this script, so carry on and report the shortfall at the end.
+    BREW_BUNDLE_FAILED=1
+    warn "Some Brewfile entries failed to install; continuing with the bootstrap"
+}
+
+disable_sketchybar_brew_service() {
+    local service="$HOME/Library/LaunchAgents/homebrew.mxcl.sketchybar.plist"
+    if [[ -e "$service" || -L "$service" ]]; then
+        info "Disabling the duplicate Homebrew SketchyBar service..."
+        if brew services stop sketchybar; then
+            success "AeroSpace's display controller now owns SketchyBar startup"
+        else
+            warn "Could not disable the Homebrew SketchyBar service"
+        fi
+    fi
 }
 
 # ============================================================================
@@ -308,28 +336,21 @@ seed_local_configs() {
 # ============================================================================
 # 12. Backup existing configs & Stow symlinks
 # ============================================================================
-list_stow_files() {
+list_stow_files() (
     local package_dir="$1"
-    find "$package_dir" \
-        \( -name .git -o -name node_modules \
-        -o -path '*/.pi/agent/sessions' \
-        -o -path '*/.pi/agent/workflows' \
-        -o -path '*/.pi/agent/bin' \) -prune \
-        -o -type f \
-        ! -name .DS_Store \
-        ! -name .env \
-        ! -name auth.json \
-        ! -name trust.json \
-        ! -name models-store.json \
-        ! -name '*.log' \
-        ! -name '*.tmp' \
-        ! -name '*.bak' \
-        ! -name '*.swp' \
-        ! -name '*.swo' \
-        -print
-}
+    local target file
+    target="$(mktemp -d "${TMPDIR:-/tmp}/dotfiles-stow-files.XXXXXX")" || return 1
+    trap 'rm -rf -- "$target"' EXIT
+    # Let Stow apply its actual ignore rules, including package-local rules.
+    # Materialize only disposable links; never alter the real home here.
+    stow -d "$DOTFILES_DIR" -t "$target" "${STOW_ARGS[@]}" "${package_dir##*/}" || return 1
+    while IFS= read -r file; do
+        printf '%s/%s\n' "$package_dir" "${file#"$target"/}"
+    done < <(find "$target" -type l -print)
+)
 
 stow_packages() {
+    local home_dir="${1:-$HOME}"
     local manifest="$BACKUP_DIR/manifest.tsv"
     local backup_created=0
     local package
@@ -340,13 +361,28 @@ stow_packages() {
         info "Stowing $package..."
 
         # Try stow, if it fails due to existing files, back them up first
-        if ! stow -d "$DOTFILES_DIR" -t "$HOME" "${STOW_ARGS[@]}" "$package" 2>/dev/null; then
+        if ! stow -d "$DOTFILES_DIR" -t "$home_dir" "${STOW_ARGS[@]}" "$package" 2>/dev/null; then
             warn "Conflict detected for $package; checking every target before changing anything..."
+            local files
+            files="$(list_stow_files "$pkg_dir")" || return 1
+            [[ -n "$files" ]] || {
+                error "No managed files found to resolve the Stow conflict for $package"
+                return 1
+            }
 
             # Refuse to replace any symlink not already pointing at this source.
             while IFS= read -r file; do
                 local rel_path="${file#"$pkg_dir"/}"
-                local target="$HOME/$rel_path"
+                local target="$home_dir/$rel_path"
+                local parent
+                parent="$(dirname "$target")"
+                while [[ "$parent" != "$home_dir" && "$parent" != / ]]; do
+                    if [[ -L "$parent" ]]; then
+                        error "Refusing to back up files through a symlinked directory: $parent"
+                        return 1
+                    fi
+                    parent="$(dirname "$parent")"
+                done
                 if [ -L "$target" ]; then
                     local target_real source_real
                     target_real="$(realpath "$target" 2>/dev/null || true)"
@@ -357,12 +393,12 @@ stow_packages() {
                         return 1
                     fi
                 fi
-            done < <(list_stow_files "$pkg_dir")
+            done <<<"$files"
 
             # Back up only real conflicting files/directories. Correct links stay.
             while IFS= read -r file; do
                 local rel_path="${file#"$pkg_dir"/}"
-                local target="$HOME/$rel_path"
+                local target="$home_dir/$rel_path"
                 if [ -e "$target" ] && [ ! -L "$target" ]; then
                     local backup_path="$BACKUP_DIR/$rel_path"
                     if ((backup_created == 0)); then
@@ -377,10 +413,10 @@ stow_packages() {
                     printf '%s\t%s\t%s\t%s\n' "$target" "$backup_path" "$(stat -f %HT "$backup_path")" "$checksum" >>"$manifest"
                     info "  Backed up: ~/$rel_path"
                 fi
-            done < <(list_stow_files "$pkg_dir")
+            done <<<"$files"
 
             # Try stow again after backup
-            stow -d "$DOTFILES_DIR" -t "$HOME" "${STOW_ARGS[@]}" "$package"
+            stow -d "$DOTFILES_DIR" -t "$home_dir" "${STOW_ARGS[@]}" "$package"
         fi
 
         success "Stowed $package"
@@ -408,8 +444,8 @@ install_pi() {
 
 # Link shared ~/.agents/skills into ~/.pi/agent/skills (pi-local skills take priority)
 link_pi_shared_skills() {
-    local agents_skills="$HOME/.agents/skills"
-    local pi_skills="$HOME/.pi/agent/skills"
+    local agents_skills="${1:-$HOME/.agents/skills}"
+    local pi_skills="${2:-$HOME/.pi/agent/skills}"
 
     if [ ! -d "$agents_skills" ]; then
         warn "No ~/.agents/skills (stow agents package first); skip pi skill links"
@@ -427,22 +463,10 @@ link_pi_shared_skills() {
         name="$(basename "$target")"
         dest="$pi_skills/$name"
 
-        # Keep pi-local / stowed skills (real dirs or already-correct links)
+        # Pi-local skills take priority, including custom or dangling symlinks.
         if [ -e "$dest" ] || [ -L "$dest" ]; then
-            if [ -L "$dest" ]; then
-                # Refresh symlink if it points elsewhere
-                local current
-                current="$(readlink "$dest" 2>/dev/null || true)"
-                if [ "$current" = "../../../.agents/skills/$name" ] || [ "$current" = "$target" ]; then
-                    skipped=$((skipped + 1))
-                    continue
-                fi
-                rm -f "$dest"
-            else
-                # Real directory (pi package skill) — do not replace
-                skipped=$((skipped + 1))
-                continue
-            fi
+            skipped=$((skipped + 1))
+            continue
         fi
 
         ln -s "../../../.agents/skills/$name" "$dest"
@@ -618,6 +642,7 @@ main() {
     install_xcode_cli
     install_homebrew
     install_brew_packages
+    disable_sketchybar_brew_service
 
     # Shell setup
     install_oh_my_zsh
@@ -652,6 +677,11 @@ main() {
     echo -e "${GREEN}  Setup Complete!${NC}"
     echo -e "${GREEN}========================================${NC}"
     echo ""
+    if ((BREW_BUNDLE_FAILED == 1)); then
+        warn "Some Brewfile entries did not install. Review them with:"
+        echo "      brew bundle check --file=\"$DOTFILES_DIR/Brewfile\" --verbose"
+        echo ""
+    fi
     echo "Next steps:"
     echo "  1. Restart your terminal (or run: source ~/.zshrc)"
     echo "  2. Edit ~/.zshrc.secrets with your API keys"

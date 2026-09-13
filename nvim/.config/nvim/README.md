@@ -35,7 +35,9 @@ directory, `%` to create a file, and `q` to close.
 
 ## LSP Navigation
 
-These work when an LSP is attached (Rust, TS, Lua).
+These work when an LSP is attached (Python, Rust, TypeScript, Lua). Python uses
+basedpyright, so hover information comes from type stubs and library source and
+continues to work offline after Mason installs it once.
 
 - `gd` -> definition
 - `gD` -> declaration

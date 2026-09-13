@@ -3,6 +3,7 @@ return {
   dependencies = { "williamboman/mason.nvim" },
   opts = {
     ensure_installed = {
+      "basedpyright",
       "lua-language-server",
       "prettier",
       "ruff",
